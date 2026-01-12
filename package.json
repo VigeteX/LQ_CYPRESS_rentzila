@@ -1,0 +1,16 @@
+{
+  "name": "lq_test_project",
+  "version": "1.0.0",
+  "type": "module",
+    "devDependencies": {
+    "cypress": "^15.8.2",
+    "typescript": "^5.9.3",
+    "@types/node": "^25.0.6",
+    "dotenv": "^17.2.3"
+  },
+  "scripts": {
+    "test": "npx cypress run",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
+  }
+}
