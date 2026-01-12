@@ -12,10 +12,6 @@ Before running the tests, make sure you have installed the following:
     npm v9+
     Cypress v15+
 
----
-## Project Structure
-
-```
 ## Steps to Install
 1. Clone this repository:
 git clone https://github.com/VigeteX/LQ_CYPRESS_rentzila.git
@@ -27,7 +23,11 @@ cd Telnyx-Cypress-UI-Tests
 ## Steps to Launch Tests
 1. Run all tests:
     npm test
+   
+---
+## Project Structure
 
+```
 ├── cypress/
 │   ├── e2e/
 │   │   └── example.cy.ts
