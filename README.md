@@ -13,7 +13,9 @@ Before running the tests, make sure you have installed the following:
     Cypress v15+
 
 ---
+## Project Structure
 
+```
 ## Steps to Install
 1. Clone this repository:
 git clone https://github.com/VigeteX/LQ_CYPRESS_rentzila.git
