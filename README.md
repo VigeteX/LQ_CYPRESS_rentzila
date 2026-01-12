@@ -15,7 +15,6 @@ Before running the tests, make sure you have installed the following:
 ## Steps to Install
 1. Clone this repository:
 git clone https://github.com/VigeteX/LQ_CYPRESS_rentzila.git
-cd Telnyx-Cypress-UI-Tests
 2. Open the project folder in VS Code.
 3. Install dependencies:
     npm install
