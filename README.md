@@ -28,14 +28,14 @@ cd Telnyx-Cypress-UI-Tests
 
 ├── cypress/
 │   ├── e2e/
-│   │   └── example.cy.ts             
+│   │   └── example.cy.ts
 │   ├── pages/
 │   ├── support/
-│   │   ├── commands.ts               # Custom Cypress commands
-│   │   └── e2e.ts                    # Global hooks and overrides
+│   │   ├── commands.ts
+│   │   └── e2e.ts
 │   └── fixtures/
-│       └── example.json              
-├── cypress.config.ts                 # Main Cypress config file
+│       └── example.json
+├── cypress.config.ts
 ├── package.json
-├── tsconfig.json                     # TypeScript configuration
+├── tsconfig.json
 └── README.md
