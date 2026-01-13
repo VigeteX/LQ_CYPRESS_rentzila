@@ -2,11 +2,11 @@
   "name": "lq_test_project",
   "version": "1.0.0",
   "type": "module",
-    "devDependencies": {
+  "devDependencies": {
+    "@types/node": "^25.0.7",
     "cypress": "^15.8.2",
-    "typescript": "^5.9.3",
-    "@types/node": "^25.0.6",
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "test": "npx cypress run",
