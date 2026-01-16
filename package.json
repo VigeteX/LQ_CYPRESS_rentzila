@@ -12,5 +12,8 @@
     "test": "npx cypress run",
     "cy:open": "cypress open",
     "cy:run": "cypress run"
+  },
+  "dependencies": {
+    "cypress-real-events": "^1.15.0"
   }
 }
