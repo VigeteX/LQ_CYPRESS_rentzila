@@ -2,11 +2,13 @@
   "name": "lq_test_project",
   "version": "1.0.0",
   "type": "module",
-    "devDependencies": {
-    "cypress": "^15.8.2",
-    "typescript": "^5.9.3",
+  "devDependencies": {
+    "@shelex/cypress-allure-plugin": "^2.41.2",
     "@types/node": "^25.0.6",
-    "dotenv": "^17.2.3"
+    "allure-commandline": "^2.36.0",
+    "cypress": "^15.8.2",
+    "dotenv": "^17.2.3",
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "test": "npx cypress run",

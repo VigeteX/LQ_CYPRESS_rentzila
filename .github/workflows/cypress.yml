@@ -30,4 +30,5 @@ jobs:
         run: npx cypress verify
 
       - name: Run Cypress tests
-        run: npx cypress run --browser chrome
+        run: |
+          npx cypress run
