@@ -11,7 +11,7 @@ describe('Login flow', () => {
         cy.visit('/');
     });
 
-    it('C200', () => {
+    it('C200 Authorization with empty field', () => {
         header.elements.enterButton().click();
 
         loginPage.elements.emailField().type(validUser.email).should('have.value', validUser.email);
@@ -31,9 +31,9 @@ describe('Login flow', () => {
         loginPage.elements.emailField().type(validUser.email).should('have.value', validUser.email);
         loginPage.elements.passwordField().type(validUser.password).should('have.value', validUser.password);;
 
-        loginPage.elements.hidepassworIcon().click();
+        loginPage.elements.hidePassworIcon().click();
         loginPage.elements.passwordField().should('have.attr', 'type', 'text');
-        loginPage.elements.hidepassworIcon().click();
+        loginPage.elements.hidePassworIcon().click();
         loginPage.elements.passwordField().should('have.attr', 'type', 'password');
 
         loginPage.elements.submitButton().click();
@@ -62,7 +62,7 @@ describe('Login flow', () => {
             it(`invalid email: ${email}`, () => {
                 header.elements.enterButton().click();
                 loginPage.login(email, validUser.password)
-                loginPage.check_error_message(errorMessages.invalidEmeilOrPhone)
+                loginPage.check_error_message(errorMessages.invalidEmailOrPhone)
                 loginPage.elements.authClose().click()
             });
         });
@@ -88,7 +88,7 @@ describe('Login flow', () => {
             it(`invalid phone: ${phone}`, () => {
                 header.elements.enterButton().click();
                 loginPage.login(phone, validUser.password)
-                loginPage.check_error_message(errorMessages.invalidEmeilOrPhone)
+                loginPage.check_error_message(errorMessages.invalidEmailOrPhone)
                 loginPage.elements.authClose().click()
             });
         });

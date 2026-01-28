@@ -3,7 +3,7 @@ export class LoginPage {
     emailField:() => cy.get('input[id*="email"]'),
     passwordField:() => cy.get('input[id="password"]'),
     submitButton:() => cy.get('div[data-testid="loginPopup"]').find('button[type="submit"]'),
-    hidepassworIcon:() => cy.get('div[data-testid="loginPopup"]').find('div[data-testid="reactHookButton"]'),
+    hidePassworIcon:() => cy.get('div[data-testid="loginPopup"]').find('div[data-testid="reactHookButton"]'),
     errorMessage:() => cy.get('[data-testid="errorMessage"]'),
     alert:() => cy.get('[role="alert"]'),
     authClose:() => cy.get('[data-testid="authClose"]'),  
