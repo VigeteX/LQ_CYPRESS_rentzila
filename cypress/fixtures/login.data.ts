@@ -1,5 +1,3 @@
-import { isEmpty } from "cypress/types/lodash";
-
 export const validUser = {
     email: 'tttest0tttest@gmail.com',
     password: 'Tttest0tttest@gmail.com',
