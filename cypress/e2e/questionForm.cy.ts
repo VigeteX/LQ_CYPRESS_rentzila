@@ -1,9 +1,7 @@
+import { formData } from "../fixtures/form.data.js";
 import homePage from "../pageObjects/HomePage.page";
 
 describe("Home page Question Form Tests", () => {
-  const validPhone = "+380506743060";
-  const invalidPhones = ["+38063 111 111", "+1 1111111111111"];
-  const validName = "Test";
 
   beforeEach(() => {
     homePage.open();
@@ -12,6 +10,8 @@ describe("Home page Question Form Tests", () => {
   });
 
   it("C226 Form validation and successful submit", () => {
+    const { validPhone, validName, invalidPhones } = formData;
+
     homePage.submit();
     homePage.shouldShowBothEmptyErrors();
 
@@ -29,7 +29,9 @@ describe("Home page Question Form Tests", () => {
 
     homePage.enterName(validName);
 
-    invalidPhones.forEach(phone => {
+    cy.wrap(invalidPhones).each((_, index) => {
+      const phone = invalidPhones[index];
+
       homePage.clearPhone();
       homePage.enterPhone(phone);
       homePage.submit();

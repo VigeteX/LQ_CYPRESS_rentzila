@@ -3,9 +3,11 @@ import { Page } from "./Page.page";
 class HomePage extends Page {
     url = "/";
 
-    emptyFieldError = "Поле не може бути порожнім";
-    invalidPhoneError = "Телефон не пройшов валідацію";
-    successfulSubmissionText = "Ви успішно відправили заявку";
+    readonly texts = {
+        emptyFieldError: "Поле не може бути порожнім",
+        invalidPhoneError: "Телефон не пройшов валідацію",
+        successfulSubmissionText: "Ви успішно відправили заявку"
+    };
 
     elements = {
         questionsForm: () => cy.get("div[class*=ConsultationForm_container]"),
@@ -51,8 +53,8 @@ class HomePage extends Page {
 
     shouldShowBothEmptyErrors() {
         this.shouldShowMultipleErrors([
-            { errorFn: this.elements.nameError, text: this.emptyFieldError },
-            { errorFn: this.elements.phoneError, text: this.emptyFieldError }
+            { errorFn: this.elements.nameError, text: this.texts.emptyFieldError },
+            { errorFn: this.elements.phoneError, text: this.texts.emptyFieldError }
         ]);
     }
 
@@ -60,7 +62,7 @@ class HomePage extends Page {
         this.shouldShowOneButNotAnother(
             this.elements.phoneError,
             this.elements.nameError,
-            this.emptyFieldError
+            this.texts.emptyFieldError
         );
     }
 
@@ -68,14 +70,14 @@ class HomePage extends Page {
         this.shouldShowOneButNotAnother(
             this.elements.nameError,
             this.elements.phoneError,
-            this.emptyFieldError
+            this.texts.emptyFieldError
         );
     }
 
     shouldShowInvalidPhoneError() {
         this.shouldShowErrorWithText(
             this.elements.phoneError,
-            this.invalidPhoneError
+            this.texts.invalidPhoneError
         );
     }
 
@@ -84,7 +86,7 @@ class HomePage extends Page {
     }
 
     shouldShowSuccessModal() {
-        this.shouldShowAlert(this.successfulSubmissionText);
+        this.shouldShowAlert(this.texts.successfulSubmissionText);
     }
 }
 

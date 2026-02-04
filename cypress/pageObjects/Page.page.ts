@@ -1,7 +1,10 @@
 export class Page {
     url = "/";
-    emptyFieldError = "Поле не може бути порожнім";
-    requiredFieldError = "Це поле обов’язкове";
+
+    readonly textBasic = {
+        emptyFieldError: "Поле не може бути порожнім",
+        requiredFieldError: "Це поле обов’язкове"
+    };
 
     open() {
         cy.visit(this.url);
@@ -98,14 +101,14 @@ export class Page {
         this.shouldContainText(asteriskFn, "*");
     }
 
-    shouldShowRequiredError(errorFn: () => Cypress.Chainable) {
+    shouldShowRequiredError = (errorFn: () => Cypress.Chainable) => {
         this.shouldBeVisible(errorFn);
-        this.shouldContainText(errorFn, this.requiredFieldError);
+        this.shouldContainText(errorFn, this.textBasic.requiredFieldError);
     }
 
     shouldShowEmptyFieldError(errorFn: () => Cypress.Chainable) {
         this.shouldBeVisible(errorFn);
-        this.shouldContainText(errorFn, this.emptyFieldError);
+        this.shouldContainText(errorFn, this.textBasic.emptyFieldError);
     }
 
     shouldShowErrorWithText(errorFn: () => Cypress.Chainable, errorText: string) {
@@ -157,7 +160,8 @@ export class Page {
     }
 
     shouldShowMultipleErrors(errorConfigs: Array<{ errorFn: () => Cypress.Chainable; text: string }>) {
-        errorConfigs.forEach(({ errorFn, text }) => {
+        cy.wrap(errorConfigs).each((_, index) => {
+            const { errorFn, text } = errorConfigs[index];
             this.shouldContainText(errorFn, text);
         });
     }

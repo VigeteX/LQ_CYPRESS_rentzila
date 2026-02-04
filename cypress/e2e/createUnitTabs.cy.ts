@@ -1,10 +1,16 @@
 import createUnitPage from "../pageObjects/CreateUnitPage.page";
+import { createUnitData } from "../fixtures/form.data.js";
 
 describe("Create Unit Tests", () => {
-    const digitTestData = "123456789";
-    const longText = "a".repeat(101);
-    const symbolTestData = "<>{};^";
-    const letterTestData = "abcdefghij";
+    const {
+        digitTestData,
+        longText,
+        symbolTestData,
+        letterTestData,
+        manufacturerName,
+        manufacturerLetter,
+        manufacturerLetters
+    } = createUnitData;
 
     beforeEach(() => {
         createUnitPage.open();
@@ -12,12 +18,13 @@ describe("Create Unit Tests", () => {
         createUnitPage.verifyOnPage();
     });
 
-    
     it("C294 Body title and tabs validation", () => {
         createUnitPage.shouldShowBodyTitle();
         createUnitPage.shouldHaveTabsCount(createUnitPage.tabNames.length);
 
-        createUnitPage.tabNames.forEach((tabName, index) => {
+        cy.wrap(createUnitPage.tabNames).each((_, index) => {
+            const tabName = createUnitPage.tabNames[index];
+
             createUnitPage.shouldTabHaveLabel(index, tabName);
             createUnitPage.shouldTabHaveNumber(index, index + 1);
 
@@ -102,10 +109,6 @@ describe("Create Unit Tests", () => {
     });
 
     it("C298 Verify vehicle manufacturer section", () => {
-        const manufacturerName = "АТЭК";
-        const letter = "А";
-        const letters = "Abc";
-
         createUnitPage.shouldShowManufacturerTitleWithAsterisk();
         createUnitPage.shouldShowManufacturerPlaceholder();
         createUnitPage.shouldShowLoupeIconInManufacturerInput();
@@ -113,10 +116,10 @@ describe("Create Unit Tests", () => {
         createUnitPage.clickNextButton();
         createUnitPage.shouldShowManufacturerRequiredError();
 
-        createUnitPage.typeManufacturer(letter);
+        createUnitPage.typeManufacturer(manufacturerLetter);
         createUnitPage.shouldShowManufacturerDropdown();
 
-        createUnitPage.pasteManufacturer(letter);
+        createUnitPage.pasteManufacturer(manufacturerLetter);
         createUnitPage.shouldShowManufacturerDropdown();
 
         createUnitPage.typeManufacturer(manufacturerName);
@@ -140,7 +143,7 @@ describe("Create Unit Tests", () => {
         createUnitPage.typeManufacturer(longText);
         createUnitPage.shouldManufacturerInputHaveMaxLength(100);
 
-        createUnitPage.typeManufacturer(letters);
+        createUnitPage.typeManufacturer(manufacturerLetters);
         createUnitPage.shouldShowManufacturerDropdown();
         createUnitPage.elements.manufacturerOptions().first().invoke("text").then(text => {
             createUnitPage.selectFirstManufacturerOption();
