@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "devDependencies": {
-    "@types/node": "^25.0.7",
+    "@shelex/cypress-allure-plugin": "^2.41.2",
+    "@types/node": "^25.0.6",
+    "allure-commandline": "^2.36.0",
     "cypress": "^15.8.2",
     "dotenv": "^17.2.3",
     "typescript": "^5.9.3"
