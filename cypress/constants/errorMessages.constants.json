@@ -1,0 +1,4 @@
+{
+  "modelNameInvalidInputMsg": "У назві моделі може бути не більше 15 символів",
+  "vehicleLocationInvalidFieldMsg": "Виберіть коректне місце на мапі України"
+}
