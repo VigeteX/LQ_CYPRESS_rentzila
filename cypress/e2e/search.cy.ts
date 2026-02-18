@@ -1,13 +1,10 @@
-import { HeaderPage } from '../pages/HeaderPage';
-import { SearchPage } from '../pages/SearchPage';
-import { ProductsPage } from '../pages/ProductsPage';
-import {  searchTerms,  specificSymbols,  nonExistingKeyword,  numericQuery,  messages} from '../fixtures/search.data';
+import header from '../pages/HeaderPage';
+import search from '../pages/SearchPage';
+import products from '../pages/ProductsPage';
+import { searchTerms, specificSymbols, nonExistingKeyword, numericQuery, messages} from '../fixtures/search.data';
+import { routes } from '../constants/routes';
 
 describe('Search functionality (C530)', () => {
-    const header = new HeaderPage();
-    const search = new SearchPage();
-    const products = new ProductsPage();
-
     beforeEach(() => {
         cy.viewport(1920, 1080);
         cy.visit('/');
@@ -21,7 +18,7 @@ describe('Search functionality (C530)', () => {
         search.elements.dropdownCategoriesLabel().should('be.visible');
 
         cy.get('body').type('{enter}');
-        cy.location('pathname').should('eq', '/products/');
+        cy.location('pathname').should('eq', routes.PRODUCTS);
         search.elements.searchInput().should('have.value', '');
 
         products.elements.unitsCountLabel()
@@ -33,13 +30,12 @@ describe('Search functionality (C530)', () => {
             });
     });
 
-
     describe('Search Tests', () => {
         searchTerms.forEach(term => {
             it(`Should search and navigate correctly for: ${term}`, () => {
 
                 search.elements.searchInput().type(term).type('{enter}');
-                cy.location('pathname').should('eq', '/products/');
+                cy.location('pathname').should('eq', routes.PRODUCTS);
 
                 products.elements.units().each($el => {
 
@@ -54,7 +50,7 @@ describe('Search functionality (C530)', () => {
                 });
 
                 products.elements.units().first().click();
-                cy.location('pathname').should('include', '/unit/');
+                cy.location('pathname').should('include', routes.UNIT);
 
                 header.elements.logo().click();
                 cy.location('pathname').should('eq', '/');
@@ -68,9 +64,7 @@ describe('Search functionality (C530)', () => {
         });
     });
 
-
     it('Handles whitespace input correctly', () => {
-
         search.elements.searchInput().type('         ');
         search.elements.dropdownHistory()
             .children()
@@ -83,17 +77,16 @@ describe('Search functionality (C530)', () => {
             .should('not.exist');
 
         cy.get('body').type('{enter}');
-        cy.location('pathname').should('eq', '/products/');
+        cy.location('pathname').should('eq', routes.PRODUCTS);
 
         products.elements.unitsCountLabel()
             .should('contain.text', messages.zeroResults);
     });
 
-
     it('Search with numeric query displays correct results', () => {
         const query = numericQuery;
         search.elements.searchInput().type(query).type('{enter}');
-        cy.location('pathname').should('eq', '/products/');
+        cy.location('pathname').should('eq', routes.PRODUCTS);
 
         products.elements.units().then($units => {
             const count = $units.length;
@@ -105,7 +98,7 @@ describe('Search functionality (C530)', () => {
                     .and('contain', query);
 
                 products.elements.units().first().click();
-                cy.location('pathname').should('include', '/unit/');
+                cy.location('pathname').should('include', routes.UNIT);
             } else {
                 products.elements.units().should('not.exist');
                 products.elements.unitsCountLabel()
@@ -114,7 +107,6 @@ describe('Search functionality (C530)', () => {
             }
         });
     });
-
 
     describe('Specific symbols search', () => {
         specificSymbols.forEach(symbol => {
@@ -131,39 +123,33 @@ describe('Search functionality (C530)', () => {
                 });
 
                 search.elements.searchInput().type('{enter}');
-                cy.location('pathname').should('eq', '/products/');
+                cy.location('pathname').should('eq', routes.PRODUCTS);
             });
         });
     });
-
 
     it('Search with non-existing keyword', () => {
         const query = nonExistingKeyword;
         search.elements.searchInput().clear().type(query).type('{enter}');
 
-        cy.location('pathname').should('eq', '/products/');
+        cy.location('pathname').should('eq', routes.PRODUCTS);
         products.elements.unitsCountLabel().should('contain.text', messages.zeroResults).and('contain', query);
         products.elements.units().should('not.exist');
     });
 
-
     it('Navigate via services dropdown (Асфальтування)', () => {
-
         search.elements.searchInput().clear().type('Асфальтування');
         search.elements.dropdownServices().should('be.visible').contains('Асфальтування').click();
         products.elements.asfaltuvannyaCheckbox().should('exist');
-        cy.location('pathname').should('include', '/products/');
+        cy.location('pathname').should('include', routes.PRODUCTS);
     });
 
-
     it('Navigate via categories dropdown (Драглайни)', () => {
-
         search.elements.searchInput().clear().type('Драглайн');
         search.elements.dropdownCategories().should('be.visible').contains('драглайни').click();
         products.elements.draglainiCheckbox().should('exist');
-        cy.location('pathname').should('include', '/products/');
+        cy.location('pathname').should('include', routes.PRODUCTS);
     });
-
 
     it('Clear search input', () => {
         search.elements.searchInput().clear().type('test');
@@ -171,5 +157,4 @@ describe('Search functionality (C530)', () => {
         search.elements.dropdownSearchResults().should('not.exist');
         search.elements.searchInput().should('have.value', '');
     });
-
 });

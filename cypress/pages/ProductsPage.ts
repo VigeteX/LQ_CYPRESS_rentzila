@@ -8,3 +8,4 @@ export class ProductsPage {
     asfaltuvannyaCheckbox:() => cy.get('div[data-testid="asfaltuvannya"]'),
   }
 }
+export default new ProductsPage();

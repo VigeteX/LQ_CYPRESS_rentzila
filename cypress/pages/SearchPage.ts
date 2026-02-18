@@ -19,3 +19,5 @@ export class SearchPage {
     searchClearButton:() => cy.get('div[data-testid="searchClear"]').first(),
   }
 }
+
+export default new SearchPage();

@@ -26,3 +26,4 @@ export class HeaderPage {
     
   }
 }
+export default new HeaderPage();

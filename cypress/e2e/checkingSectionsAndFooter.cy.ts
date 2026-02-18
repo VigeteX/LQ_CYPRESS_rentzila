@@ -1,10 +1,8 @@
-import { HeaderPage } from '../pages/HeaderPage';
-import { FooterPage } from '../pages/FooterPage';
+import header from '../pages/HeaderPage';
+import footer from '../pages/FooterPage';
+import { routes } from '../constants/routes';
 
-describe('Login flow', () => {
-    const header = new HeaderPage();
-    const footer = new FooterPage();
-    
+describe('Login flow', () => {   
     beforeEach(() => {
         cy.viewport(1920, 1080);
         cy.visit('/');
@@ -65,21 +63,21 @@ describe('Login flow', () => {
 
         footer.elements.politikaKonfidenciinosti().click();
         footer.elements.politikaKonfidenciinostiLabel().should('be.visible');
-        cy.url().should('include', '/privacy-policy/')
+        cy.url().should('include', routes.PRIVACY_POLICY)
 
         footer.elements.content().scrollIntoView();
         footer.elements.pravilaVikoristannyaFailivCookie().click();
         footer.elements.pravilaVikoristannyaFailivCookieLabel().should('be.visible');
-        cy.url().should('include', '/cookie-policy/')
+        cy.url().should('include', routes.COOKIE_POLICY)
 
         footer.elements.content().scrollIntoView();
         footer.elements.umoviDostupuTaKoristuvannya().click();
         footer.elements.umoviDostupuTaKoristuvannyaLabel().should('be.visible');
-        cy.url().should('include', '/terms-conditions/')
+        cy.url().should('include', routes.TERMS_CONDITIONS)
 
         footer.elements.content().scrollIntoView();
         footer.elements.ogoloshennya().click();
-        cy.url().should('include', '/products/')
+        cy.url().should('include', routes.PRODUCTS) 
         footer.elements.searchInputAnnouncement().should('be.visible');
         footer.elements.searchInputAnnouncement().should('have.attr', 'placeholder', 'Пошук оголошень або послуг');
 
@@ -87,14 +85,13 @@ describe('Login flow', () => {
 
         footer.elements.content().scrollIntoView();
         footer.elements.tenderi().find('a').click();
-        cy.url().should('include', '/tenders-map/')
+        cy.url().should('include', routes.TENDERS_MAP)
         footer.elements.searchInputTenders().should('be.visible');
         footer.elements.searchInputTenders().should('have.attr', 'placeholder', 'Пошук тендера за ключовими словами');
 
         header.elements.logo().click();
 
         footer.elements.content().scrollIntoView(); 
-        // footer.elements.email().click(); // этот тест не работает, ссылка не активна
     });
 
 });

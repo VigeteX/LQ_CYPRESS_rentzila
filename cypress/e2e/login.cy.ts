@@ -1,11 +1,8 @@
-import { LoginPage } from '../pages/LoginPage';
-import { HeaderPage } from '../pages/HeaderPage';
+import loginPage from '../pages/LoginPage';
+import header from '../pages/HeaderPage';
 import { validUser, validPhones, invalidEmails, invalidPasswords, invalidPhones, wrongPassword, errorMessages } from '../fixtures/login.data';
 
-describe('Login flow', () => {
-    const loginPage = new LoginPage();
-    const header = new HeaderPage();
-    
+describe('Login flow', () => {   
     beforeEach(() => {
         cy.viewport(1920, 1080);
         cy.visit('/');
