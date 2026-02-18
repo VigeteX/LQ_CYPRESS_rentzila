@@ -6,6 +6,7 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "strict": false,
+        "resolveJsonModule": true,
         "types": ["cypress", "node"]
     },
     "include": ["cypress/**/*.ts", "config/*.ts", "cypress.config.ts"]

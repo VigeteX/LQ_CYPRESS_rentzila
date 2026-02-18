@@ -69,7 +69,40 @@ class CreateUnitPage extends Page {
         manufacturerNotFoundText: () => cy.get("p[data-testid*=notFound-addNewItem]"),
         manufacturerClearButton: () => cy.get('button[data-testid="closeButton"]'),
 
-        nextButton: () => cy.get("[data-testid=nextButton]")
+        //Model Name section locators
+        modelNameWrapper: () => cy.get('.CustomInput_wrapper__zU62a').last(),
+        modelNameTitle: () => this.elements.modelNameWrapper().find("[class*='CustomInput_title']"),
+        modelNameInput: () => this.elements.modelNameWrapper().find("input"),
+        modelNameInvalidInputMsg: () => this.elements.modelNameWrapper().find('[data-testid="descriptionError"]'),
+
+        //Tech characteristics section locators
+        techCharsWrapper: () => cy.get('.CustomTextAriaDescription_wrapper__Uf_XB').first(),
+        techCharsTitle: () => this.elements.techCharsWrapper().find("[class*='CustomTextAriaDescription_title']"),
+        techCharsTextArea: () => this.elements.techCharsWrapper().find('[data-testid="textarea-customTextAriaDescription"]'),
+
+        //Description section
+        descWrapper: () => cy.get('.CustomTextAriaDescription_wrapper__Uf_XB').last(),
+        descTitle: () => this.elements.descWrapper().find("[class*='CustomTextAriaDescription_title']"),
+        descTextArea: () => this.elements.descWrapper().find('[data-testid="textarea-customTextAriaDescription"]'),
+
+        //Vehicle location locators
+        vehicleLocationWrapper: () => cy.get('.AddressSelectionBlock_wrapper__RYudq'),
+        vehicleLocationTitle: () => this.elements.vehicleLocationWrapper().find("[class*='AddressSelectionBlock_title']"),
+        vehicleLocationRequiredFieldSign: () => this.elements.vehicleLocationTitle().find("span"),
+        vehicleLocationMapLbl: () => cy.get('[data-testid="mapLabel"]'),
+        vehicleLocationEmptyMsg: () => this.elements.vehicleLocationWrapper().find("[class*='AddressSelectionBlock_errorTextVisible']"),
+        vehicleLocationOnMapBtn: () => this.elements.vehicleLocationWrapper().find("[class*='AddressSelectionBlock_locationBtn']"),
+
+        //Map pop Up locators
+        mapPopupWrapper: () => cy.get('[data-testid="mapPopup"]'),
+        mapPopupTitle: () => this.elements.mapPopupWrapper().find("[class*='MapPopup_title']"),
+        mapPopupCloseCross: () => this.elements.mapPopupWrapper().find("[data-testid='crossIcon']"),
+        mapPopupCityInput: () => this.elements.mapPopupWrapper().find("[data-testid='cityInput']"),
+        mapPopupAddress: () => this.elements.mapPopupWrapper().find("[data-testid='address']"),
+        mapPopupMap: () => this.elements.mapPopupWrapper().find("#map"),
+
+        nextButton: () => cy.get("[data-testid=nextButton]"),
+        cancelButton: () => cy.get("[data-testid=prevButton]")
     };
 
     shouldShowBodyTitle() {
@@ -290,6 +323,7 @@ class CreateUnitPage extends Page {
     clickNextButton() {
         this.click(this.elements.nextButton);
     }
+
 }
 
 export default new CreateUnitPage();
