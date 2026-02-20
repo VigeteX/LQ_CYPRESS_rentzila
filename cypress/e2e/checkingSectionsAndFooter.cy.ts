@@ -1,6 +1,7 @@
 import header from '../pages/HeaderPage';
 import footer from '../pages/FooterPage';
 import { routes } from '../constants/routes';
+import { footerPlaceholders } from '../constants/uiTexts';
 
 describe('Login flow', () => {   
     beforeEach(() => {
@@ -79,7 +80,7 @@ describe('Login flow', () => {
         footer.elements.ogoloshennya().click();
         cy.url().should('include', routes.PRODUCTS) 
         footer.elements.searchInputAnnouncement().should('be.visible');
-        footer.elements.searchInputAnnouncement().should('have.attr', 'placeholder', 'Пошук оголошень або послуг');
+        footer.elements.searchInputAnnouncement().should('have.attr', 'placeholder', footerPlaceholders.announcementSearch);
 
         header.elements.logo().click();
 
@@ -87,7 +88,7 @@ describe('Login flow', () => {
         footer.elements.tenderi().find('a').click();
         cy.url().should('include', routes.TENDERS_MAP)
         footer.elements.searchInputTenders().should('be.visible');
-        footer.elements.searchInputTenders().should('have.attr', 'placeholder', 'Пошук тендера за ключовими словами');
+        footer.elements.searchInputTenders().should('have.attr', 'placeholder', footerPlaceholders.tendersSearch);
 
         header.elements.logo().click();
 

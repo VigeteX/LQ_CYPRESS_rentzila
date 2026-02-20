@@ -41,9 +41,9 @@ export const invalidPhones = [
 
 export const wrongPassword = 'Tttest1tttest@gmail.com';
 
-export const errorMessages = {
-    emptyField: 'Поле не може бути порожнім',
-    invalidEmailOrPhone: 'Неправильний формат email або номера телефону',
-    invalidPassword: 'Пароль повинен містити як мінімум 1 цифру, 1 велику літеру і 1 малу літеру, також не повинен містити кирилицю та пробіли',
-    wrongEmailOrPassword: 'Невірний e-mail або пароль',
-};
+// export const errorMessages = {
+//     emptyField: 'Поле не може бути порожнім',
+//     invalidEmailOrPhone: 'Неправильний формат email або номера телефону',
+//     invalidPassword: 'Пароль повинен містити як мінімум 1 цифру, 1 велику літеру і 1 малу літеру, також не повинен містити кирилицю та пробіли',
+//     wrongEmailOrPassword: 'Невірний e-mail або пароль',
+// };

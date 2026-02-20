@@ -1,8 +1,9 @@
 import header from '../pages/HeaderPage';
 import search from '../pages/SearchPage';
 import products from '../pages/ProductsPage';
-import { searchTerms, specificSymbols, nonExistingKeyword, numericQuery, messages} from '../fixtures/search.data';
+import { searchTerms, specificSymbols, nonExistingKeyword, numericQuery} from '../fixtures/search.data';
 import { routes } from '../constants/routes';
+import { searchMessages } from '../constants/uiTexts';
 
 describe('Search functionality (C530)', () => {
     beforeEach(() => {
@@ -80,7 +81,7 @@ describe('Search functionality (C530)', () => {
         cy.location('pathname').should('eq', routes.PRODUCTS);
 
         products.elements.unitsCountLabel()
-            .should('contain.text', messages.zeroResults);
+            .should('contain.text', searchMessages.zeroResults);
     });
 
     it('Search with numeric query displays correct results', () => {
@@ -102,7 +103,7 @@ describe('Search functionality (C530)', () => {
             } else {
                 products.elements.units().should('not.exist');
                 products.elements.unitsCountLabel()
-                    .should('contain.text', messages.zeroResults)
+                    .should('contain.text', searchMessages.zeroResults)
                     .and('contain', query);
             }
         });
@@ -133,7 +134,7 @@ describe('Search functionality (C530)', () => {
         search.elements.searchInput().clear().type(query).type('{enter}');
 
         cy.location('pathname').should('eq', routes.PRODUCTS);
-        products.elements.unitsCountLabel().should('contain.text', messages.zeroResults).and('contain', query);
+        products.elements.unitsCountLabel().should('contain.text', searchMessages.zeroResults).and('contain', query);
         products.elements.units().should('not.exist');
     });
 
