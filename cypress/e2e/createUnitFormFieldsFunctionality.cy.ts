@@ -49,7 +49,7 @@ describe('Create Unit Form Fields validation', () => {
             .should("be.visible")
             .and('have.value', '');
 
-        createUnitPage.elements.techCharsTextArea().type(faker.string.fromCharacters('<>{};^', faker.number.int({ min: 1, max: 6 })));
+        createUnitPage.elements.techCharsTextArea().type(faker.string.fromCharacters('<>{};^', faker.number.int({ min: 1, max: 6 })), { parseSpecialCharSequences: false });
         createUnitPage.elements.techCharsTextArea().should('have.value', '')
 
         createUnitPage.elements.techCharsTextArea().type(faker.string.alphanumeric(9001), {delay: 0});
