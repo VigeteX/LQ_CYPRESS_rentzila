@@ -17,3 +17,5 @@ export class LoginPage {
     this.elements.submitButton().click();
   }
 }
+
+export default new LoginPage();
