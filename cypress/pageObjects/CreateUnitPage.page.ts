@@ -1,4 +1,5 @@
 import { Page } from "./Page.page";
+import {faker} from "@faker-js/faker";
 
 class CreateUnitPage extends Page {
     url = "/create-unit/";
@@ -52,6 +53,10 @@ class CreateUnitPage extends Page {
         firstColumnOptions: () => cy.get('[class*=FirstCategory_wrapper]'),
         secondColumnOptions: () => cy.get('[class*=SecondCategory_wrapper]'),
         thirdColumnOptions: () => cy.get('[class*=ThirdCategory_wrapper]'),
+        firstCategoryColumnOptions: () => cy.get("[data-testid=firstCategoryList]").children(),
+        secondCategoryColumnOptions: () => cy.get(".LevelCategoryList_wrapper__SvMKI").first().children(),
+        thirdCategoryColumnOptions: () => cy.get(".LevelCategoryList_wrapper__SvMKI").last().children(),
+
 
         unitNameTitle: () => cy.get("div[class*=CustomInput_title]").first(),
         unitNameAsterisk: () => cy.get("div[class*=CustomInput_title] span"),
@@ -100,10 +105,96 @@ class CreateUnitPage extends Page {
         mapPopupCityInput: () => this.elements.mapPopupWrapper().find("[data-testid='cityInput']"),
         mapPopupAddress: () => this.elements.mapPopupWrapper().find("[data-testid='address']"),
         mapPopupMap: () => this.elements.mapPopupWrapper().find("#map"),
+        mapVerifyChoiceBtn: () => this.elements.mapPopupWrapper().find("button[class*='ItemButtons_darkBlueBtn']"),
+
+        //Photos tab locators
+        techVehiclePhotosTitle: () => cy.get('.ImagesUnitFlow_paragraph__gQRyS'),
+        techVehiclePhotosTitleRequiredSign: () => this.elements.techVehiclePhotosTitle().find("span"),
+        techVehiclePhotosDescription: () => cy.get('[data-testid="description"]'),
+        techPhotosInput: () => cy.get('[data-testid="input_ImagesUnitFlow"]'),
+        techPhotosArray: () => cy.get('[data-testid="unitImage"]'),
+        techPhotosBlockArray: () => cy.get('[data-testid="imageBlock"]'),
+        techPhotosMainPhoto: () => this.elements.techPhotosArray().first(),
+        techPhotosMainPhotoTitle: () => cy.get('[data-testid="mainImageLabel"]'),
+        techPhotosErrorPopup: () => cy.get('[class*="PopupLayout_content"]'),
+        techPhotosErrorPopupMsg: () => cy.get('[data-testid="errorPopup"]'),
+        techPhotosErrorPopupCloseCross: () => cy.get('[data-testid="closeIcon"]'),
+        techPhotosErrorPopupSaveBtn: () => this.elements.techPhotosErrorPopup().find("button"),
 
         nextButton: () => cy.get("[data-testid=nextButton]"),
-        cancelButton: () => cy.get("[data-testid=prevButton]")
+        cancelButton: () => cy.get("[data-testid=prevButton]"),
     };
+
+    /**
+     * Clicks a random element from the provided Cypress element getter.
+     *
+     * @param getElements - Function returning a Cypress chainable
+     * with a collection of HTMLElements.
+     *
+     * @example
+     * clickRandomOption(createUnitPage.elements.firstCategoryColumnOptions);
+     */
+    clickRandomOption(getElements: () => Cypress.Chainable<JQuery<HTMLElement>>) {
+        getElements()
+            .its('length')
+            .then((length) => {
+                const randomIndex = Cypress._.random(0, length - 1);
+
+                getElements()
+                    .eq(randomIndex)
+                    .click();
+            });
+    }
+
+    deleteAllImages(): Cypress.Chainable<void> {
+        return cy.get('body').then(($body) => {
+
+            const $images = $body.find('[data-testid="unitImage"][src!=""]');
+
+            if ($images.length === 0) {
+                return;
+            }
+            return cy.wrap($images[0])
+                .closest('[data-testid="imageBlock"]')
+                .realHover({ position: 'center' })
+                .find('[data-testid="deleteImage"]')
+                .click({ force: true })
+                .then(() => this.deleteAllImages());
+        });
+    }
+
+    fillRequiredFields(): void {
+        this.elements.categoryInput().click();
+
+        this.clickRandomOption(this.elements.firstCategoryColumnOptions);
+        this.clickRandomOption(this.elements.secondCategoryColumnOptions);
+        this.clickRandomOption(this.elements.thirdCategoryColumnOptions);
+
+        this.elements.unitNameInput().type(faker.string.alphanumeric(20));
+
+        this.elements.manufacturerInput().type("C");
+        this.clickRandomOption(this.elements.manufacturerOptions);
+
+        this.elements.vehicleLocationOnMapBtn().click();
+        this.elements.mapVerifyChoiceBtn().click();
+        cy.wait(1000);
+    }
+
+    uploadPhoto(filePath: string | string[]) {
+        return this.elements.techPhotosInput().selectFile(filePath, { force: true });
+    }
+
+    closeErrorPopupByCross() {
+        return this.elements.techPhotosErrorPopupCloseCross().click();
+    }
+
+    closeErrorPopupBySaveBtn() {
+        return this.elements.techPhotosErrorPopupSaveBtn().click();
+    }
+
+    closeErrorPopupByOutsideClick() {
+        return cy.get('body').click();
+    }
 
     shouldShowBodyTitle() {
         this.shouldBeVisible(this.elements.bodyTitle);

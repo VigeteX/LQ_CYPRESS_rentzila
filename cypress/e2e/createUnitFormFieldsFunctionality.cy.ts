@@ -130,4 +130,46 @@ describe('Create Unit Form Fields validation', () => {
         cy.url({ timeout: 10000 }).should('eq', process.env.BASE_URL + '/');
 
     });
+    it('С329: Verify "Далі" button', () => {
+        createUnitPage.elements.nextButton()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.nextButtonTitle)
+            .click();
+
+        createUnitPage.elements.categoryError()
+            .should('be.visible')
+            .and('contain.text', errorMessages.requiredFieldMsg);
+        createUnitPage.elements.unitNameError()
+            .should('be.visible')
+            .and('contain.text', errorMessages.requiredFieldMsg);
+        createUnitPage.elements.manufacturerError()
+            .should('be.visible')
+            .and('contain.text', errorMessages.requiredFieldMsg);
+        createUnitPage.elements.vehicleLocationEmptyMsg()
+            .should('be.visible')
+            .and('contain.text', errorMessages.vehicleLocationInvalidFieldMsg);
+
+        createUnitPage.fillRequiredFields()
+
+        createUnitPage.elements.nextButton().click();
+
+        createUnitPage.elements.bodyTitle()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.formTitle);
+
+        createUnitPage.elements.tabs()
+            .should('be.visible')
+            .and('have.length', 5)
+
+        createUnitPage.elements.tabs().each(($tab, index) => {
+            cy.wrap($tab).should('have.text', createUnitFormFieldsText.tabs[index]);
+            if(index === 1){
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'true');
+            }
+            else {
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'false');
+            }
+        });
+
+    });
 });
