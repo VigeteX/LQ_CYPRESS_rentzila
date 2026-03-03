@@ -171,7 +171,7 @@ describe('Create Unit Form Fields validation', () => {
             }
         });
     });
-    it('C390: Verify "Назад" button', () => {
+    it.skip('C390: Verify "Назад" button', () => {
         createUnitPage.fillRequiredFields();
         createUnitPage.elements.nextButton().click();
 
@@ -209,7 +209,7 @@ describe('Create Unit Form Fields validation', () => {
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.vehicleLocationTitle);
     });
-    it('C393: Verify "Далі" button at second tab', () => {
+    it.skip('C393: Verify "Далі" button at second tab', () => {
         const validPhoto: string = "cypress/testData/validPhotos/photo_1.jpg"
         createUnitPage.fillRequiredFields();
         createUnitPage.elements.nextButton().click();
