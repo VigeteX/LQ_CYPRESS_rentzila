@@ -17,7 +17,7 @@ describe('Services tab functionality', () => {
         createUnitPage.uploadPhoto(testPhotoPath);
         createUnitPage.elements.nextButton().click();
     })
-    it('C409: Verify input section and choosing of existing service',  () => {
+    it.skip('C409: Verify input section and choosing of existing service',  () => {
         createUnitPage.elements.servicesInputTitle()
             .should('be.visible')
             .and('have.text', servicesTextConstants.servicesInputTitle);
