@@ -6,6 +6,9 @@ export class HeaderPage {
     profileDropdown:() => cy.get('div[data-testid="email"]').closest('div'),
     profileDropdownEmail:() => cy.get('div[data-testid="email"]'),
     logoutButton:() => cy.get('div[data-testid="logout"]'),
+    
+    unitsButton:() => cy.get('div[data-testid="units"]'),
+    myUnitsButton:() => cy.get('div[data-testid="units"]').find('li').contains("Мої оголошення"),
 
     servicesSection:() => cy.get('section[data-testid="services"]'),
     servicesSectionTitle:() => cy.get('section[data-testid="services"]').find('h2[data-testid="title"]'),
@@ -23,6 +26,8 @@ export class HeaderPage {
 
     searchForm:() => cy.get('div[data-testid="searchForm"]').first(),
     serchResultContainer:() => cy.get('div[data-testid="container"]').should('exist').parent().children('div').eq(2),
+
+    productsButton:() => cy.get('a[href="/products/"]')
     
   }
 }

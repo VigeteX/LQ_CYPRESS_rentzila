@@ -5,4 +5,6 @@ export const routes = {
   PRODUCTS: '/products/',
   TENDERS_MAP: '/tenders-map/',
   UNIT: '/unit/',
+  OWNER_FAVORITE_UNITS: '/owner-favourite-units/',
+  OWNER_UNITS_PAGE: '/owner-units-page/'
 }

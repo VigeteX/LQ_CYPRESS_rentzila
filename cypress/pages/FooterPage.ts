@@ -19,12 +19,12 @@ export class FooterPage {
     futterLogo:() => cy.get('div[data-testid="content"]').parent().parent().find('div[data-testid="logo"]'),
     copyright:() => cy.get('div[data-testid="copyright"]'),
 
-    politikaKonfidenciinostiLabel:() => cy.get('h1').contains("Політика конфіденційності"), // /privacy-policy/
-    pravilaVikoristannyaFailivCookieLabel:() => cy.get('h1').contains("Політика використання файлів cookie"), // /cookie-policy/
-    umoviDostupuTaKoristuvannyaLabel:() => cy.get('h1').contains("Угода користувача"), // /terms-conditions/
-    searchInputAnnouncement:() => cy.get('input[data-testid="searchInput"]'), //Пошук оголошень або послуг /map/
+    politikaKonfidenciinostiLabel:() => cy.get('h1').contains("Політика конфіденційності"),
+    pravilaVikoristannyaFailivCookieLabel:() => cy.get('h1').contains("Політика використання файлів cookie"),
+    umoviDostupuTaKoristuvannyaLabel:() => cy.get('h1').contains("Угода користувача"),
+    searchInputAnnouncement:() => cy.get('input[data-testid="searchInput"]'),
     
-    searchInputTenders:() => cy.get('input[placeholder="Пошук тендера за ключовими словами"]'), // Пошук тендера за ключовими словами /tenders-map/
+    searchInputTenders:() => cy.get('input[placeholder="Пошук тендера за ключовими словами"]'),
     
   }
 }

@@ -6,7 +6,7 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "strict": false,
-        "types": ["cypress", "node"]
+        "types": ["cypress", "node", "cypress-real-events"]
     },
     "include": ["cypress/**/*.ts", "config/*.ts"]
 }

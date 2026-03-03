@@ -7,7 +7,14 @@ export const specificSymbols = [
   '!', '@', '#', '$', '%', '^', '(', ')', '*', '<', '>', ';', '{', '}', '[', ']'
 ];
 
-export const nonExistingKeyword = 'non-existent тест1234567890';
+export const nonExistingKeyword = 'тест1234567890';
 
 export const numericQuery = '123';
 
+export const spaceInputs = [
+  " ", "  ", "         ",
+]
+
+export const specificSymbols2 = [
+  '--', '!', '@', '#', '$', '%', '(', ')', '*'
+]//'<', '>', '^', '^', 
