@@ -1,11 +1,6 @@
 import createUnitPage from "../pageObjects/CreateUnitPage.page";
-import {faker} from "@faker-js/faker";
 import createUnitFormFieldsText from "../constants/createUnitFormFields.constants.json";
 import errorMessages from "../constants/errorMessages.constants.json"
-import testAddresses from "../constants/mapAdrdresses.constants.json"
-import cancelApproveMessages from "../constants/cancelAprroveText.constants.json"
-import {wait} from "cypress-real-events/utils";
-import {ac} from "@faker-js/faker/dist/airline-Dz1uGqgJ";
 
 describe('Create Unit Form Fields validation', () => {
     beforeEach(() => {
@@ -31,21 +26,11 @@ describe('Create Unit Form Fields validation', () => {
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.techVehiclePhotosDescription);
 
-        const testPhotosArray: string[] = [
-            "cypress/testData/validPhotos/photo_1.jpg",
-            "cypress/testData/validPhotos/photo_2.jpg",
-            "cypress/testData/validPhotos/photo_3.jpg",
-            "cypress/testData/validPhotos/photo_4.jpg",
-            "cypress/testData/validPhotos/photo_5.jpeg",
-            "cypress/testData/validPhotos/photo_6.jpeg",
-            "cypress/testData/validPhotos/photo_7.jpeg",
-            "cypress/testData/validPhotos/photo_8.jpeg",
-            "cypress/testData/validPhotos/photo_9.png",
-            "cypress/testData/validPhotos/photo_10.png",
-            "cypress/testData/validPhotos/photo_11.png",
-            "cypress/testData/validPhotos/photo_12.png"
-        ]
-        createUnitPage.uploadPhoto(testPhotosArray);
+        cy.task<string[]>('getFilesFromFolder', 'cypress/testData/validPhotos')
+            .then((files) => {
+                createUnitPage.elements.techPhotosInput().selectFile(files, { force: true })
+            })
+
         createUnitPage.elements.techPhotosMainPhotoTitle()
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.techPhotosMainPhotoText);

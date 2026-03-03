@@ -1,5 +1,7 @@
 {
   "modelNameTitle": "Назва моделі",
+  "unitNameTitle": "Назва моделі",
+  "categoryTitle": "Категорія",
   "modelNameBackgroundText": "Введіть назву моделі",
   "techCharacteristicsTitle": "Технічні характеристики",
   "detailedDescriptionTitle": "Детальний опис",
@@ -8,8 +10,10 @@
   "mapPopupTitle": "Техніка на мапі",
   "mapPopupDefaultAddress": "Київ,   Україна, Київська область",
   "cancelButtonTitle": "Скасувати",
+  "gobackButtonTitle": "Назад",
   "nextButtonTitle": "Далі",
   "formTitle": "Створити оголошення",
+  "servicesTitle": "Послуги",
   "tabs": [
     "1Основна інформація",
     "2Фотографії",

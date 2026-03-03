@@ -1,5 +1,6 @@
 import { Page } from "./Page.page";
 import {faker} from "@faker-js/faker";
+import createUnitFormFieldsText from "../constants/createUnitFormFields.constants.json";
 
 class CreateUnitPage extends Page {
     url = "/create-unit/";
@@ -54,8 +55,8 @@ class CreateUnitPage extends Page {
         secondColumnOptions: () => cy.get('[class*=SecondCategory_wrapper]'),
         thirdColumnOptions: () => cy.get('[class*=ThirdCategory_wrapper]'),
         firstCategoryColumnOptions: () => cy.get("[data-testid=firstCategoryList]").children(),
-        secondCategoryColumnOptions: () => cy.get(".LevelCategoryList_wrapper__SvMKI").first().children(),
-        thirdCategoryColumnOptions: () => cy.get(".LevelCategoryList_wrapper__SvMKI").last().children(),
+        secondCategoryColumnOptions: () => cy.get('[class*=LevelCategoryList_wrapper]').first().children(),
+        thirdCategoryColumnOptions: () => cy.get("[class*=LevelCategoryList_wrapper]").last().children(),
 
 
         unitNameTitle: () => cy.get("div[class*=CustomInput_title]").first(),
@@ -108,7 +109,7 @@ class CreateUnitPage extends Page {
         mapVerifyChoiceBtn: () => this.elements.mapPopupWrapper().find("button[class*='ItemButtons_darkBlueBtn']"),
 
         //Photos tab locators
-        techVehiclePhotosTitle: () => cy.get('.ImagesUnitFlow_paragraph__gQRyS'),
+        techVehiclePhotosTitle: () => cy.get('[class*=ImagesUnitFlow_paragraph]'),
         techVehiclePhotosTitleRequiredSign: () => this.elements.techVehiclePhotosTitle().find("span"),
         techVehiclePhotosDescription: () => cy.get('[data-testid="description"]'),
         techPhotosInput: () => cy.get('[data-testid="input_ImagesUnitFlow"]'),
@@ -120,6 +121,18 @@ class CreateUnitPage extends Page {
         techPhotosErrorPopupMsg: () => cy.get('[data-testid="errorPopup"]'),
         techPhotosErrorPopupCloseCross: () => cy.get('[data-testid="closeIcon"]'),
         techPhotosErrorPopupSaveBtn: () => this.elements.techPhotosErrorPopup().find("button"),
+
+        //Services tab locators
+        servicesWrapper: () => cy.get('[class*="ServicesUnitFlow_wrapper"]'),
+        servicesTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_title"]'),
+        servicesInputTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_paragraph"]'),
+        servicesInputTileRequiredSign: () => this.elements.servicesInputTitle().find('span'),
+        servicesInputClueLine: () => this.elements.servicesWrapper().find('[data-testid="add-info"]'),
+        servicesSearchResult: () => this.elements.servicesWrapper().find('[data-testid="searchResult"]'),
+        servicesInputLoopSign: () => this.elements.servicesSearchResult().find('svg'),
+        servicesInput: () => this.elements.servicesSearchResult().find('input'),
+        servicesInputSearchResultsDropdown: () => this.elements.servicesSearchResult().find('[class*="ServicesUnitFlow_searchedServicesCatWrapper"]'),
+        servicesInputSearchResultsArray: () => this.elements.servicesInputSearchResultsDropdown().find('[data-testid="searchItem-servicesUnitFlow"]'),
 
         nextButton: () => cy.get("[data-testid=nextButton]"),
         cancelButton: () => cy.get("[data-testid=prevButton]"),
@@ -177,7 +190,7 @@ class CreateUnitPage extends Page {
 
         this.elements.vehicleLocationOnMapBtn().click();
         this.elements.mapVerifyChoiceBtn().click();
-        cy.wait(1000);
+        this.elements. vehicleLocationMapLbl().should('have.text', createUnitFormFieldsText.mapPopupDefaultAddress);
     }
 
     uploadPhoto(filePath: string | string[]) {
