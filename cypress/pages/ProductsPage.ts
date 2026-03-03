@@ -3,7 +3,7 @@ export class ProductsPage {
   
   elements ={
     units:() => cy.get('div[data-testid="cardWrapper"]'),
-    unitsCountLabel:() => cy.get('h1').contains('Знайдено'),
+    unitsCountLabel:() => cy.get('h1[class*="MapPagination_count"]'),
 
     draglainiCheckbox:() => cy.get('div[data-testid="draglaini"]'),
     asfaltuvannyaCheckbox:() => cy.get('div[data-testid="asfaltuvannya"]'),
@@ -29,7 +29,8 @@ export class ProductsPage {
       this.elements.units().eq(i).within(() => {
           this.elements.favouriteButoon().find('path').last().then(($path) => {
               if (!$path.attr('fill')) {
-                  this.elements.favouriteButoon().click();
+                this.elements.favouriteButoon().click();
+                this.elements.favouriteButoon().find('path').last().should('have.attr', 'fill');
               }
           });
       });
