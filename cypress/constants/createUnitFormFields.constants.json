@@ -1,0 +1,11 @@
+{
+  "modelNameTitle": "Назва моделі",
+  "modelNameBackgroundText": "Введіть назву моделі",
+  "techCharacteristicsTitle": "Технічні характеристики",
+  "detailedDescriptionTitle": "Детальний опис",
+  "vehicleLocationTitle": "Місце розташування технічного засобу",
+  "vehicleLocationLabelTitle": "Виберіть на мапі",
+  "mapPopupTitle": "Техніка на мапі",
+  "mapPopupDefaultAddress": "Київ,   Україна, Київська область",
+  "cancelButtonTitle": "Скасувати"
+}
