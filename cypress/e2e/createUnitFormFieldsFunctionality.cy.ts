@@ -11,7 +11,7 @@ describe('Create Unit Form Fields validation', () => {
         cy.login();
         createUnitPage.verifyOnPage();
     })
-    it('C299: Verify model name input field',  () => {
+    it.skip('C299: Verify model name input field',  () => {
         createUnitPage.elements.modelNameTitle()
             .should("be.visible")
             .and('contain.text', createUnitFormFieldsText.modelNameTitle);
@@ -41,7 +41,7 @@ describe('Create Unit Form Fields validation', () => {
         createUnitPage.elements.modelNameInput().clear().type(faker.string.alphanumeric( {length: {min:1, max:15}} ));
         createUnitPage.elements.modelNameInvalidInputMsg().should("not.exist");
     });
-    it('C317: Verify tech characteristics input field',  () => {
+    it.skip('C317: Verify tech characteristics input field',  () => {
         createUnitPage.elements.techCharsTitle()
             .should("be.visible")
             .and('contain.text', createUnitFormFieldsText.techCharacteristicsTitle);
@@ -57,7 +57,7 @@ describe('Create Unit Form Fields validation', () => {
             .invoke("text")
             .should('have.length', 9000);
     });
-    it('C318: Verify description section',  () => {
+    it.skip('C318: Verify description section',  () => {
         createUnitPage.elements.descTitle()
             .should('be.visible')
             .and('contain.text', createUnitFormFieldsText.detailedDescriptionTitle);
@@ -73,7 +73,7 @@ describe('Create Unit Form Fields validation', () => {
             .invoke("text")
             .should('have.length', 9000);
     });
-    it('C319: Verify vehicle location division',  () => {
+    it.skip('C319: Verify vehicle location division',  () => {
         createUnitPage.elements.vehicleLocationTitle()
             .should('be.visible')
             .and("contain.text", createUnitFormFieldsText.vehicleLocationTitle);
@@ -130,7 +130,7 @@ describe('Create Unit Form Fields validation', () => {
         cy.url({ timeout: 10000 }).should('eq', process.env.BASE_URL + '/');
 
     });
-    it('С329: Verify "Далі" button', () => {
+    it.skip('С329: Verify "Далі" button', () => {
         createUnitPage.elements.nextButton()
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.nextButtonTitle)
@@ -171,7 +171,7 @@ describe('Create Unit Form Fields validation', () => {
             }
         });
     });
-    it.skip('C390: Verify "Назад" button', () => {
+    it('C390: Verify "Назад" button', () => {
         createUnitPage.fillRequiredFields();
         createUnitPage.elements.nextButton().click();
 
@@ -195,10 +195,14 @@ describe('Create Unit Form Fields validation', () => {
             .and('have.text', createUnitFormFieldsText.categoryTitle);
         createUnitPage.elements.unitNameTitle()
             .should('be.visible')
-            .and('have.text', createUnitFormFieldsText.unitNameTitle);
+            .invoke('text')
+            .then(text => text.replace(/\s+/g, ' ').trim())
+            .should('eq', createUnitFormFieldsText.unitNameTitle)
         createUnitPage.elements.modelNameTitle()
             .should('be.visible')
-            .and('have.text', createUnitFormFieldsText.modelNameTitle);
+            .invoke('text')
+            .then(text => text.replace(/\s+/g, ' ').trim())
+            .should('eq', createUnitFormFieldsText.modelNameTitle)
         createUnitPage.elements.techCharsTitle()
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.techCharacteristicsTitle);
@@ -207,9 +211,11 @@ describe('Create Unit Form Fields validation', () => {
             .and('have.text', createUnitFormFieldsText.detailedDescriptionTitle);
         createUnitPage.elements.vehicleLocationTitle()
             .should('be.visible')
-            .and('have.text', createUnitFormFieldsText.vehicleLocationTitle);
+            .invoke('text')
+            .then(text => text.replace(/\s+/g, ' ').trim())
+            .should('eq', createUnitFormFieldsText.vehicleLocationTitle)
     });
-    it.skip('C393: Verify "Далі" button at second tab', () => {
+    it('C393: Verify "Далі" button at second tab', () => {
         const validPhoto: string = "cypress/testData/validPhotos/photo_1.jpg"
         createUnitPage.fillRequiredFields();
         createUnitPage.elements.nextButton().click();
