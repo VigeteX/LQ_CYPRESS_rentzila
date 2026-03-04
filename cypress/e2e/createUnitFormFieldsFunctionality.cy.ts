@@ -11,7 +11,7 @@ describe('Create Unit Form Fields validation', () => {
         cy.login();
         createUnitPage.verifyOnPage();
     })
-    it.skip('C299: Verify model name input field',  () => {
+    it('C299: Verify model name input field',  () => {
         createUnitPage.elements.modelNameTitle()
             .should("be.visible")
             .and('contain.text', createUnitFormFieldsText.modelNameTitle);
@@ -41,7 +41,7 @@ describe('Create Unit Form Fields validation', () => {
         createUnitPage.elements.modelNameInput().clear().type(faker.string.alphanumeric( {length: {min:1, max:15}} ));
         createUnitPage.elements.modelNameInvalidInputMsg().should("not.exist");
     });
-    it.skip('C317: Verify tech characteristics input field',  () => {
+    it('C317: Verify tech characteristics input field',  () => {
         createUnitPage.elements.techCharsTitle()
             .should("be.visible")
             .and('contain.text', createUnitFormFieldsText.techCharacteristicsTitle);
@@ -57,7 +57,7 @@ describe('Create Unit Form Fields validation', () => {
             .invoke("text")
             .should('have.length', 9000);
     });
-    it.skip('C318: Verify description section',  () => {
+    it('C318: Verify description section',  () => {
         createUnitPage.elements.descTitle()
             .should('be.visible')
             .and('contain.text', createUnitFormFieldsText.detailedDescriptionTitle);
@@ -73,7 +73,7 @@ describe('Create Unit Form Fields validation', () => {
             .invoke("text")
             .should('have.length', 9000);
     });
-    it.skip('C319: Verify vehicle location division',  () => {
+    it('C319: Verify vehicle location division',  () => {
         createUnitPage.elements.vehicleLocationTitle()
             .should('be.visible')
             .and("contain.text", createUnitFormFieldsText.vehicleLocationTitle);
@@ -114,7 +114,7 @@ describe('Create Unit Form Fields validation', () => {
         createUnitPage.elements.mapPopupCloseCross().click();
         createUnitPage.elements.vehicleLocationMapLbl().should('have.text', createUnitFormFieldsText.vehicleLocationLabelTitle);
     })
-    it.skip('C326: Verify "Скасувати" button', () => {  //Temporarily failing due to bug
+    it('C326: Verify "Скасувати" button', () => {  //Temporarily failing due to bug
         createUnitPage.elements.cancelButton()
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.cancelButtonTitle);
@@ -130,7 +130,7 @@ describe('Create Unit Form Fields validation', () => {
         cy.url({ timeout: 10000 }).should('eq', process.env.BASE_URL + '/');
 
     });
-    it.skip('С329: Verify "Далі" button', () => {
+    it('С329: Verify "Далі" button', () => {
         createUnitPage.elements.nextButton()
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.nextButtonTitle)
