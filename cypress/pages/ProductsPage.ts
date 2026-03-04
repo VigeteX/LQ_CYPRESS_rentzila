@@ -24,17 +24,23 @@ export class ProductsPage {
     
   }
   addUnits(amount: number){
-    this.elements.units().should('have.length.greaterThan', 0)
-    for (let i = 0; i < amount; i++) {
-      this.elements.units().eq(i).within(() => {
-          this.elements.favouriteButoon().find('path').last().then(($path) => {
-              if (!$path.attr('fill')) {
-                this.elements.favouriteButoon().click();
-                this.elements.favouriteButoon().find('path').last().should('have.attr', 'fill');
-              }
-          });
+    this.elements.units().should('have.length.greaterThan', 0).then(() => {
+      this.addUnitsRecursive(amount, 0);
+    });
+  }
+  private addUnitsRecursive(amount: number, index: number): void {
+    if (index >= amount) return;
+
+    this.elements.units().eq(index).within(() => {
+      this.elements.favouriteButoon().find('path').last().then(($path) => {
+        if (!$path.attr('fill')) {
+          this.elements.favouriteButoon().click();
+          this.elements.favouriteButoon().find('path').last().should('have.attr', 'fill');
+        }
       });
-    }
+    }).then(() => {
+      this.addUnitsRecursive(amount, index + 1);
+    });
   }
 }
 export default new ProductsPage();

@@ -6,6 +6,7 @@ import { validUser } from '../fixtures/login.data';
 import { routes } from '../constants/routes';
 import 'cypress-real-events';
 import { spaceInputs, specificSymbols2, nonExistingKeyword} from '../fixtures/search.data';
+import { unitsPlaceholders, messages, categoryLabels, allowedCategories } from '../constants/uiTexts';
 
 describe('Login flow', () => {   
     beforeEach(() => {
@@ -28,7 +29,7 @@ describe('Login flow', () => {
         header.elements.productsButton().should('have.attr', 'class').and('contain', 'Navbar_active');
     });
     
-    it('C302 ""Обрані"" icon functionality', () => {
+    it('C302 "Обрані" icon functionality', () => {
         header.elements.productsButton().should("be.visible")
         header.elements.productsButton().first().click()
         cy.url().should('include', routes.PRODUCTS)
@@ -70,7 +71,7 @@ describe('Login flow', () => {
         });
     });
 
-    it('C305 ""Пошук по назві"" search field functionality', () => {
+    it('C305 "Пошук по назві" search field functionality', () => {
         cy.visit(routes.PRODUCTS);
         products.addUnits(3)
         header.elements.avatarIcon().click();
@@ -86,7 +87,7 @@ describe('Login flow', () => {
 
         spaceInputs.forEach(input => {
             units.elements.searchInput().first().clear()
-            .should('have.attr', 'placeholder', 'Заголовок оголошення')
+            .should('have.attr', 'placeholder', unitsPlaceholders.unitTitle)
             .type(input)
             .should('have.value', input);
         });
@@ -95,18 +96,18 @@ describe('Login flow', () => {
         units.elements.units().should('be.visible')
 
         units.elements.searchInput().first().clear().type('16')
-        units.elements.emptyUnitsTitle().contains('Оголошення за назвою "16" не знайдені').should('exist')
+        units.elements.emptyUnitsTitle().contains(messages.noUnitsByName("16")).should('exist')
 
         specificSymbols2.forEach(input => {
             units.elements.searchInput().first().clear().type(input).should('have.value', input);
-            units.elements.emptyUnitsTitle().contains(`Оголошення за назвою "${input}" не знайдені`).should('exist')
+            units.elements.emptyUnitsTitle().contains(messages.noUnitsByName(input)).should('exist')
         });
         
         units.elements.searchInput().first().clear().type(nonExistingKeyword).should('have.value', nonExistingKeyword);
-        units.elements.emptyUnitsTitle().contains(`Оголошення за назвою "${nonExistingKeyword}" не знайдені`).should('exist')
+        units.elements.emptyUnitsTitle().contains(messages.noUnitsByName(nonExistingKeyword)).should('exist')
         units.elements.searchInput().first().clear()
 
-        let savedName;
+        let savedName: string;;
         units.elements.units().first().find('div[class*="OwnerUnitCard_name"]').invoke('text').then((t) => {
             savedName = t.trim();
         });
@@ -116,7 +117,7 @@ describe('Login flow', () => {
         });
     });
 
-    it('C311 Check the pagination on the ""Обрані оголошення"" page', () => {
+    it('C311 Check the pagination on the "Обрані оголошення" page', () => {
         header.elements.avatarIcon().click();
         header.elements.profileDropdown().should('be.visible');
         header.elements.unitsButton().realHover();
@@ -143,13 +144,12 @@ describe('Login flow', () => {
         units.elements.previousPageButton().click()
         units.elements.pageNumber().contains('1').should('be.visible').should('have.attr', 'aria-label').and('include', 'is your current page');
 
-        for (let i = 0; i < 11; i++) {
-            units.elements.nextPageButton().click()
-        }
+        units.clickNext(11);
+
         units.elements.pageNumber().contains('12').should('be.visible').should('have.attr', 'aria-label').and('include', 'is your current page');
     });
 
-    it('C315 ""Всі категорії"" dropdown menu functionality', () => {
+    it('C315 "Всі категорії" dropdown menu functionality', () => {
         cy.intercept('*', (req) => {
             console.log(req.method, req.url);
         });
@@ -183,15 +183,15 @@ describe('Login flow', () => {
         header.elements.myUnitsButton().click()
         units.elements.favouriteUnitsButton().click()
 
-        units.elements.customSelectDropdawn().contains('Всі категорії').should('be.visible')
+        units.elements.customSelectDropdawn().contains(categoryLabels.all).should('be.visible')
 
         let pagesCount;
         units.elements.units().then(($pages) => {
             pagesCount = $pages.length;
         });
         cy.then(() => {
-            units.elements.customSelectDropdawn().contains('Всі категорії').click()
-            units.elements.customSelectOption().contains('Будівельна техніка').click()
+            units.elements.customSelectDropdawn().contains(categoryLabels.all).click()
+            units.elements.customSelectOption().contains(categoryLabels.construction).click()
             units.elements.units().should('have.length.lessThan', pagesCount)
         });
         units.elements.units().first().click()
@@ -200,34 +200,34 @@ describe('Login flow', () => {
         cy.visit(routes.OWNER_FAVORITE_UNITS);
         cy.url().should('include', routes.OWNER_FAVORITE_UNITS)
         cy.then(() => {
-            units.elements.customSelectDropdawn().contains('Всі категорії').click()
-            units.elements.customSelectOption().contains('Комунальна техніка').click()
+            units.elements.customSelectDropdawn().contains(categoryLabels.all).click()
+            units.elements.customSelectOption().contains(categoryLabels.municipal).click()
             units.elements.units().should('have.length.lessThan', pagesCount)
         });
 
         units.elements.units().first().click()
         cy.url().should('include', routes.UNIT)
-        const allowedMunicipalCategories = /Аварійні машини|Дорожньо-прибиральна техніка|Клінінгове обладнання|Комунальні контейнери|Комунальні машини|Обладнання для комунальної техніки/;
-        products.elements.secondCategorySpan().first().invoke('text').then(text => text.trim()).should('match', allowedMunicipalCategories);
-
-        cy.visit(routes.OWNER_FAVORITE_UNITS);
-        cy.url().should('include', routes.OWNER_FAVORITE_UNITS)
-        cy.then(() => {
-            units.elements.customSelectDropdawn().contains('Всі категорії').click()
-            units.elements.customSelectOption().contains('Складська техніка').click()
-            units.elements.units().should('have.length.lessThan', pagesCount)
-        });
         
-        units.elements.units().first().click()
-        cy.url().should('include', routes.UNIT)
-        const allowedWarehouseCategories = /- Категорія 1|Обладнання для навантажувачів|Техніка для складування/;
-        products.elements.secondCategorySpan().first().invoke('text').then(text => text.trim()).should('match', allowedWarehouseCategories); 
+        products.elements.secondCategorySpan().first().invoke('text').then(text => text.trim()).should('match', allowedCategories.municipal);
 
         cy.visit(routes.OWNER_FAVORITE_UNITS);
         cy.url().should('include', routes.OWNER_FAVORITE_UNITS)
         cy.then(() => {
-            units.elements.customSelectDropdawn().contains('Всі категорії').click()
-            units.elements.customSelectOption().contains('Всі категорії').click()
+            units.elements.customSelectDropdawn().contains(categoryLabels.all).click()
+            units.elements.customSelectOption().contains(categoryLabels.warehouse).click()
+            units.elements.units().should('have.length.lessThan', pagesCount)
+        });
+    
+        units.elements.units().first().click()
+        cy.url().should('include', routes.UNIT)
+
+        products.elements.secondCategorySpan().first().invoke('text').then(text => text.trim()).should('match', allowedCategories.warehouse); 
+
+        cy.visit(routes.OWNER_FAVORITE_UNITS);
+        cy.url().should('include', routes.OWNER_FAVORITE_UNITS)
+        cy.then(() => {
+            units.elements.customSelectDropdawn().contains(categoryLabels.all).click()
+            units.elements.customSelectOption().contains(categoryLabels.all).click()
             units.elements.units().should('have.length', pagesCount)
         });
     });

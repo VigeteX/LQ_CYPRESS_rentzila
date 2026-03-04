@@ -38,6 +38,13 @@ export class UnitsPage {
         }
     });
   }
+  clickNext(times: number){
+    if (times === 0) return;
+    this.elements.nextPageButton().should('be.visible').click().then(() => {
+      this.clickNext(times - 1);
+    });
+  };
+
 }
 
 export default new UnitsPage();
