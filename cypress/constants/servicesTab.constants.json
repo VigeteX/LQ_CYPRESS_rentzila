@@ -1,4 +1,9 @@
 {
   "servicesInputTitle": "Знайдіть послуги, які надає Ваш технічний засіб *",
-  "servicesInputClueLine": "Додайте в оголошення принаймні 1 послугу"
+  "servicesInputClueLine": "Додайте в оголошення принаймні 1 послугу",
+  "pickedServicesTitle": "Послуги, які надає технічний засіб: ",
+  "serviceNotFoundMsg": "На жаль, послугу “{serviceName}“ не знайдено в нашій базі.  Ви можете додати послугу в категорію\n          “Користувацькі”:",
+  "createNewServiceBtnTitle": "Створити послугу",
+  "servicesInputPlaceholder": "Наприклад: Рихлення грунту, буріння",
+  "servicePickedMarkAttribute": "M1 5.54545L5.54545 10.0909L13.1212 1"
 }

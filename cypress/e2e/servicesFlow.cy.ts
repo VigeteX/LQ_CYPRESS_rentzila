@@ -1,14 +1,11 @@
 import createUnitPage from "../pageObjects/CreateUnitPage.page";
 import {faker} from "@faker-js/faker";
-import createUnitFormFieldsText from "../constants/createUnitFormFields.constants.json";
-import errorMessages from "../constants/errorMessages.constants.json"
-import testAddresses from "../constants/mapAdrdresses.constants.json"
-import cancelApproveMessages from "../constants/cancelAprroveText.constants.json"
 import servicesTextConstants from "../constants/servicesTab.constants.json"
 
 describe('Services tab functionality', () => {
     beforeEach(() => {
         const testPhotoPath: string = "cypress/testData/validPhotos/photo_1.jpg"
+
         createUnitPage.open();
         cy.login();
         createUnitPage.verifyOnPage();
@@ -17,7 +14,7 @@ describe('Services tab functionality', () => {
         createUnitPage.uploadPhoto(testPhotoPath);
         createUnitPage.elements.nextButton().click();
     })
-    it.skip('C409: Verify input section and choosing of existing service',  () => {
+    it('C409: Verify input section and choosing of existing service', () => {
         createUnitPage.elements.servicesInputTitle()
             .should('be.visible')
             .and('have.text', servicesTextConstants.servicesInputTitle);
@@ -28,7 +25,7 @@ describe('Services tab functionality', () => {
         createUnitPage.elements.servicesInputLoopSign().should('be.visible')
         createUnitPage.elements.servicesInput()
             .should('be.visible')
-            .and('have.attr', 'placeholder', 'Наприклад: Рихлення грунту, буріння')
+            .and('have.attr', 'placeholder', servicesTextConstants.servicesInputPlaceholder);
 
         const unacceptableSymbols: string = "<>;{};^"
 
@@ -44,32 +41,107 @@ describe('Services tab functionality', () => {
             .invoke("val")
             .should('have.length', 100);
 
+        const searchWord: string = 'Буріння'
         createUnitPage.elements.servicesInput()
             .clear()
-            .type('Б');
+            .type(searchWord[0]);
 
         createUnitPage.elements.servicesInputSearchResultsDropdown().should('be.visible')
 
         createUnitPage.elements.servicesInput()
             .clear()
-            .type('Буріння');
+            .type(searchWord);
 
         createUnitPage.elements.servicesInputSearchResultsDropdown().should('be.visible')
-        const firstArr = createUnitPage.elements.servicesInputSearchResultsArray();
+        createUnitPage.elements.servicesInputSearchResultsArray().then(($firstArr) => {
+            const firstArrTexts = Cypress._.map($firstArr, 'innerText').map(text => text.trim());
 
+            createUnitPage.elements.servicesInput()
+                .clear()
+                .type(searchWord.toUpperCase());
+
+            createUnitPage.elements.servicesInputSearchResultsArray().then(($secondArr) => {
+                const secondArrTexts = Cypress._.map($secondArr, 'innerText').map(text => text.trim());
+                expect(secondArrTexts).to.deep.equal(firstArrTexts);
+            });
+        });
+
+         createUnitPage.elements.servicesInputSearchResultsArray().then(results => {
+             const randomIndex: number = faker.number.int(results.length - 1);
+
+             cy.wrap(results).eq(randomIndex).click();
+             cy.wrap(results[randomIndex])
+                 .find('path')
+                 .should('have.attr', 'd', servicesTextConstants.servicePickedMarkAttribute);
+
+             cy.wrap(results[randomIndex])
+                 .invoke('text')
+                 .then((pickedServiceName) => {
+
+                     const trimmedName:string = pickedServiceName.trim();
+
+                     createUnitPage.elements.servicesPickedTitle()
+                         .should('be.visible')
+                         .and('have.text', servicesTextConstants.pickedServicesTitle);
+
+                     createUnitPage.elements.servicesPickedArray()
+                         .should('be.visible')
+                         .and('contain.text', trimmedName);
+                 });
+         })
+    });
+    it('C410: Verify creating new service', () => {
+        const testServiceName = faker.lorem.words(2);
+
+        createUnitPage.elements.servicesInput().type(testServiceName);
+        createUnitPage.elements.servicesNotFoundMsg()
+            .should('be.visible')
+            .and('contain.text', servicesTextConstants.serviceNotFoundMsg.replace("{serviceName}", testServiceName))
+
+        createUnitPage.elements.servicesCreateNew()
+            .find('svg')
+            .should('be.visible')
+        createUnitPage.elements.servicesCreateNew()
+            .should('be.visible')
+            .and('contain.text', servicesTextConstants.createNewServiceBtnTitle)
+            .click();
+
+        createUnitPage.elements.servicesPickedArray().should('be.visible').and('have.text', testServiceName);
+    })
+    it('C410: Verify creating new service', () => {
+        const searchSymbol: string = 'Г'
         createUnitPage.elements.servicesInput()
             .clear()
-            .type('БУРІННЯ');
+            .type(searchSymbol);
 
         createUnitPage.elements.servicesInputSearchResultsDropdown().should('be.visible')
-        //createUnitPage.elements.servicesInputSearchResultsArray().should('equal', firstArr);
 
-        createUnitPage.elements.servicesInputSearchResultsDropdown().then(results => {
-            const randomIndex = faker.number.int(results.length);
+        createUnitPage.elements.servicesInputSearchResultsArray().then(results => {
+            const arrLength = results.length;
+            const randomAmount = Cypress._.random(1, arrLength);
 
-            cy.wrap(results).eq(randomIndex).click();
-            cy.wrap(results[randomIndex]).find('path').should('have.attr', 'd', 'M1 5.54545L5.54545 10.0909L13.1212 1');
+            const shuffledResults = Cypress._.shuffle(results.toArray());
+            const randomChoices = shuffledResults.slice(0, randomAmount);
+            const randomChoicesTextArray = []
 
-        })
+            cy.wrap(randomChoices).each(($el, index, $list) => {
+                cy.wrap($el)
+                    .invoke('text')
+                    .then((pickedServiceName) => {
+                        randomChoicesTextArray.push(pickedServiceName.trim());
+                    })
+                    .then(() => {
+                        cy.wrap($el)
+                            .click()
+                            .find('path')
+                            .should('have.attr', 'd', servicesTextConstants.servicePickedMarkAttribute)
+                    })
+            })
+
+            createUnitPage.elements.servicesPickedArray().then(($pickedServicesArr) => {
+                const secondArrTexts = Cypress._.map($pickedServicesArr, 'innerText').map(text => text.trim());
+                expect(secondArrTexts).to.deep.equal(randomChoicesTextArray);
+            });
+        });
     });
 });
