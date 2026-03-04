@@ -12,6 +12,7 @@ describe('Services tab functionality', () => {
         createUnitPage.fillRequiredFields()
         createUnitPage.elements.nextButton().click();
         createUnitPage.uploadPhoto(testPhotoPath);
+        createUnitPage.elements.techPhotosMainPhotoTitle().should("be.visible")
         createUnitPage.elements.nextButton().click();
     })
     it('C409: Verify input section and choosing of existing service', () => {
