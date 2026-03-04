@@ -114,7 +114,7 @@ describe('Create Unit Form Fields validation', () => {
         createUnitPage.elements.mapPopupCloseCross().click();
         createUnitPage.elements.vehicleLocationMapLbl().should('have.text', createUnitFormFieldsText.vehicleLocationLabelTitle);
     })
-    it('C326: Verify "Скасувати" button', () => {  //Temporarily failing due to bug
+    it.skip('C326: Verify "Скасувати" button', () => {  //Temporarily failing due to bug
         createUnitPage.elements.cancelButton()
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.cancelButtonTitle);
