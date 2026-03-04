@@ -1,4 +1,6 @@
 import { Page } from "./Page.page";
+import {faker} from "@faker-js/faker";
+import createUnitFormFieldsText from "../constants/createUnitFormFields.constants.json";
 
 class CreateUnitPage extends Page {
     url = "/create-unit/";
@@ -52,6 +54,10 @@ class CreateUnitPage extends Page {
         firstColumnOptions: () => cy.get('[class*=FirstCategory_wrapper]'),
         secondColumnOptions: () => cy.get('[class*=SecondCategory_wrapper]'),
         thirdColumnOptions: () => cy.get('[class*=ThirdCategory_wrapper]'),
+        firstCategoryColumnOptions: () => cy.get("[data-testid=firstCategoryList]").children(),
+        secondCategoryColumnOptions: () => cy.get('[class*=LevelCategoryList_wrapper]').first().children(),
+        thirdCategoryColumnOptions: () => cy.get("[class*=LevelCategoryList_wrapper]").last().children(),
+
 
         unitNameTitle: () => cy.get("div[class*=CustomInput_title]").first(),
         unitNameAsterisk: () => cy.get("div[class*=CustomInput_title] span"),
@@ -100,10 +106,108 @@ class CreateUnitPage extends Page {
         mapPopupCityInput: () => this.elements.mapPopupWrapper().find("[data-testid='cityInput']"),
         mapPopupAddress: () => this.elements.mapPopupWrapper().find("[data-testid='address']"),
         mapPopupMap: () => this.elements.mapPopupWrapper().find("#map"),
+        mapVerifyChoiceBtn: () => this.elements.mapPopupWrapper().find("button[class*='ItemButtons_darkBlueBtn']"),
+
+        //Photos tab locators
+        techVehiclePhotosTitle: () => cy.get('[class*=ImagesUnitFlow_paragraph]'),
+        techVehiclePhotosTitleRequiredSign: () => this.elements.techVehiclePhotosTitle().find("span"),
+        techVehiclePhotosDescription: () => cy.get('[data-testid="description"]'),
+        techPhotosInput: () => cy.get('[data-testid="input_ImagesUnitFlow"]'),
+        techPhotosArray: () => cy.get('[data-testid="unitImage"]'),
+        techPhotosBlockArray: () => cy.get('[data-testid="imageBlock"]'),
+        techPhotosMainPhoto: () => this.elements.techPhotosArray().first(),
+        techPhotosMainPhotoTitle: () => cy.get('[data-testid="mainImageLabel"]'),
+        techPhotosErrorPopup: () => cy.get('[class*="PopupLayout_content"]'),
+        techPhotosErrorPopupMsg: () => cy.get('[data-testid="errorPopup"]'),
+        techPhotosErrorPopupCloseCross: () => cy.get('[data-testid="closeIcon"]'),
+        techPhotosErrorPopupSaveBtn: () => this.elements.techPhotosErrorPopup().find("button"),
+
+        //Services tab locators
+        servicesWrapper: () => cy.get('[class*="ServicesUnitFlow_wrapper"]'),
+        servicesTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_title"]'),
+        servicesInputTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_paragraph"]'),
+        servicesInputTileRequiredSign: () => this.elements.servicesInputTitle().find('span'),
+        servicesInputClueLine: () => this.elements.servicesWrapper().find('[data-testid="add-info"]'),
+        servicesSearchResult: () => this.elements.servicesWrapper().find('[data-testid="searchResult"]'),
+        servicesInputLoopSign: () => this.elements.servicesSearchResult().find('svg'),
+        servicesInput: () => this.elements.servicesSearchResult().find('input'),
+        servicesInputSearchResultsDropdown: () => this.elements.servicesSearchResult().find('[class*="ServicesUnitFlow_searchedServicesCatWrapper"]'),
+        servicesInputSearchResultsArray: () => this.elements.servicesInputSearchResultsDropdown().find('[data-testid="searchItem-servicesUnitFlow"]'),
 
         nextButton: () => cy.get("[data-testid=nextButton]"),
-        cancelButton: () => cy.get("[data-testid=prevButton]")
+        cancelButton: () => cy.get("[data-testid=prevButton]"),
     };
+
+    /**
+     * Clicks a random element from the provided Cypress element getter.
+     *
+     * @param getElements - Function returning a Cypress chainable
+     * with a collection of HTMLElements.
+     *
+     * @example
+     * clickRandomOption(createUnitPage.elements.firstCategoryColumnOptions);
+     */
+    clickRandomOption(getElements: () => Cypress.Chainable<JQuery<HTMLElement>>) {
+        getElements()
+            .its('length')
+            .then((length) => {
+                const randomIndex = Cypress._.random(0, length - 1);
+
+                getElements()
+                    .eq(randomIndex)
+                    .click();
+            });
+    }
+
+    deleteAllImages(): Cypress.Chainable<void> {
+        return cy.get('body').then(($body) => {
+
+            const $images = $body.find('[data-testid="unitImage"][src!=""]');
+
+            if ($images.length === 0) {
+                return;
+            }
+            return cy.wrap($images[0])
+                .closest('[data-testid="imageBlock"]')
+                .realHover({ position: 'center' })
+                .find('[data-testid="deleteImage"]')
+                .click({ force: true })
+                .then(() => this.deleteAllImages());
+        });
+    }
+
+    fillRequiredFields(): void {
+        this.elements.categoryInput().click();
+
+        this.clickRandomOption(this.elements.firstCategoryColumnOptions);
+        this.clickRandomOption(this.elements.secondCategoryColumnOptions);
+        this.clickRandomOption(this.elements.thirdCategoryColumnOptions);
+
+        this.elements.unitNameInput().type(faker.string.alphanumeric(20));
+
+        this.elements.manufacturerInput().type("C");
+        this.clickRandomOption(this.elements.manufacturerOptions);
+
+        this.elements.vehicleLocationOnMapBtn().click();
+        this.elements.mapVerifyChoiceBtn().click();
+        this.elements. vehicleLocationMapLbl().should('have.text', createUnitFormFieldsText.mapPopupDefaultAddress);
+    }
+
+    uploadPhoto(filePath: string | string[]) {
+        return this.elements.techPhotosInput().selectFile(filePath, { force: true });
+    }
+
+    closeErrorPopupByCross() {
+        return this.elements.techPhotosErrorPopupCloseCross().click();
+    }
+
+    closeErrorPopupBySaveBtn() {
+        return this.elements.techPhotosErrorPopupSaveBtn().click();
+    }
+
+    closeErrorPopupByOutsideClick() {
+        return cy.get('body').click();
+    }
 
     shouldShowBodyTitle() {
         this.shouldBeVisible(this.elements.bodyTitle);

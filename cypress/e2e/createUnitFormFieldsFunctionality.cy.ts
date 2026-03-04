@@ -49,7 +49,7 @@ describe('Create Unit Form Fields validation', () => {
             .should("be.visible")
             .and('have.value', '');
 
-        createUnitPage.elements.techCharsTextArea().type(faker.string.fromCharacters('<>{};^', faker.number.int({ min: 1, max: 6 })), { parseSpecialCharSequences: false });
+        createUnitPage.elements.techCharsTextArea().type(faker.string.fromCharacters('<>{};^', faker.number.int({ min: 1, max: 6 })));
         createUnitPage.elements.techCharsTextArea().should('have.value', '')
 
         createUnitPage.elements.techCharsTextArea().type(faker.string.alphanumeric(9001), {delay: 0});
@@ -130,4 +130,123 @@ describe('Create Unit Form Fields validation', () => {
         cy.url({ timeout: 10000 }).should('eq', process.env.BASE_URL + '/');
 
     });
+    it('С329: Verify "Далі" button', () => {
+        createUnitPage.elements.nextButton()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.nextButtonTitle)
+            .click();
+
+        createUnitPage.elements.categoryError()
+            .should('be.visible')
+            .and('contain.text', errorMessages.requiredFieldMsg);
+        createUnitPage.elements.unitNameError()
+            .should('be.visible')
+            .and('contain.text', errorMessages.requiredFieldMsg);
+        createUnitPage.elements.manufacturerError()
+            .should('be.visible')
+            .and('contain.text', errorMessages.requiredFieldMsg);
+        createUnitPage.elements.vehicleLocationEmptyMsg()
+            .should('be.visible')
+            .and('contain.text', errorMessages.vehicleLocationInvalidFieldMsg);
+
+        createUnitPage.fillRequiredFields()
+
+        createUnitPage.elements.nextButton().click();
+
+        createUnitPage.elements.bodyTitle()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.formTitle);
+
+        createUnitPage.elements.tabs()
+            .should('be.visible')
+            .and('have.length', 5)
+
+        createUnitPage.elements.tabs().each(($tab, index) => {
+            cy.wrap($tab).should('have.text', createUnitFormFieldsText.tabs[index]);
+            if(index === 1){
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'true');
+            }
+            else {
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'false');
+            }
+        });
+    });
+    it.skip('C390: Verify "Назад" button', () => {
+        createUnitPage.fillRequiredFields();
+        createUnitPage.elements.nextButton().click();
+
+        createUnitPage.elements.cancelButton()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.gobackButtonTitle)
+            .click();
+
+        createUnitPage.elements.tabs().each(($tab, index) => {
+            cy.wrap($tab).should('have.text', createUnitFormFieldsText.tabs[index]);
+            if(index === 0){
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'true');
+            }
+            else {
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'false');
+            }
+        });
+
+        createUnitPage.elements.categoryTitle()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.categoryTitle);
+        createUnitPage.elements.unitNameTitle()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.unitNameTitle);
+        createUnitPage.elements.modelNameTitle()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.modelNameTitle);
+        createUnitPage.elements.techCharsTitle()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.techCharacteristicsTitle);
+        createUnitPage.elements.descTitle()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.detailedDescriptionTitle);
+        createUnitPage.elements.vehicleLocationTitle()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.vehicleLocationTitle);
+    });
+    it.skip('C393: Verify "Далі" button at second tab', () => {
+        const validPhoto: string = "cypress/testData/validPhotos/photo_1.jpg"
+        createUnitPage.fillRequiredFields();
+        createUnitPage.elements.nextButton().click();
+
+        createUnitPage.elements.nextButton()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.nextButtonTitle)
+            .click();
+
+        createUnitPage.elements.tabs().each(($tab, index) => {
+            cy.wrap($tab).should('have.text', createUnitFormFieldsText.tabs[index]);
+            if(index === 1){
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'true');
+            }
+            else {
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'false');
+            }
+        });
+
+        createUnitPage.elements.techVehiclePhotosDescription().should('have.class', 'ImagesUnitFlow_error__L_45e');
+
+        createUnitPage.uploadPhoto(validPhoto);
+        createUnitPage.elements.nextButton().click();
+
+        createUnitPage.elements.tabs().each(($tab, index) => {
+            cy.wrap($tab).should('have.text', createUnitFormFieldsText.tabs[index]);
+            if(index === 2){
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'true');
+            }
+            else {
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'false');
+            }
+        });
+
+        createUnitPage.elements.servicesTitle().should('be.visible').and('have.text', createUnitFormFieldsText.servicesTitle);
+    });
 });
+
+
+
