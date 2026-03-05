@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
         "target": "ES2020",
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "module": "CommonJS",          
+        "moduleResolution": "node",  
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "strict": false,
-        "types": ["cypress", "node", "cypress-real-events"]
+        "resolveJsonModule": true,
+        "types": ["cypress", "node"]
     },
-    "include": ["cypress/**/*.ts", "config/*.ts"]
+    "include": ["cypress/**/*.ts", "config/*.ts", "cypress.config.ts"]
 }
