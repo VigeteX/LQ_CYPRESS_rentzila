@@ -171,7 +171,7 @@ describe('Create Unit Form Fields validation', () => {
             }
         });
     });
-    it.skip('C390: Verify "Назад" button', () => {
+    it('C390: Verify "Назад" button', () => {
         createUnitPage.fillRequiredFields();
         createUnitPage.elements.nextButton().click();
 
@@ -195,10 +195,14 @@ describe('Create Unit Form Fields validation', () => {
             .and('have.text', createUnitFormFieldsText.categoryTitle);
         createUnitPage.elements.unitNameTitle()
             .should('be.visible')
-            .and('have.text', createUnitFormFieldsText.unitNameTitle);
+            .invoke('text')
+            .then(text => text.replace(/\s+/g, ' ').trim())
+            .should('eq', createUnitFormFieldsText.unitNameTitle)
         createUnitPage.elements.modelNameTitle()
             .should('be.visible')
-            .and('have.text', createUnitFormFieldsText.modelNameTitle);
+            .invoke('text')
+            .then(text => text.replace(/\s+/g, ' ').trim())
+            .should('eq', createUnitFormFieldsText.modelNameTitle)
         createUnitPage.elements.techCharsTitle()
             .should('be.visible')
             .and('have.text', createUnitFormFieldsText.techCharacteristicsTitle);
@@ -207,9 +211,11 @@ describe('Create Unit Form Fields validation', () => {
             .and('have.text', createUnitFormFieldsText.detailedDescriptionTitle);
         createUnitPage.elements.vehicleLocationTitle()
             .should('be.visible')
-            .and('have.text', createUnitFormFieldsText.vehicleLocationTitle);
+            .invoke('text')
+            .then(text => text.replace(/\s+/g, ' ').trim())
+            .should('eq', createUnitFormFieldsText.vehicleLocationTitle)
     });
-    it.skip('C393: Verify "Далі" button at second tab', () => {
+    it('C393: Verify "Далі" button at second tab', () => {
         const validPhoto: string = "cypress/testData/validPhotos/photo_1.jpg"
         createUnitPage.fillRequiredFields();
         createUnitPage.elements.nextButton().click();

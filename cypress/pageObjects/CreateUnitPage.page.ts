@@ -133,6 +133,11 @@ class CreateUnitPage extends Page {
         servicesInput: () => this.elements.servicesSearchResult().find('input'),
         servicesInputSearchResultsDropdown: () => this.elements.servicesSearchResult().find('[class*="ServicesUnitFlow_searchedServicesCatWrapper"]'),
         servicesInputSearchResultsArray: () => this.elements.servicesInputSearchResultsDropdown().find('[data-testid="searchItem-servicesUnitFlow"]'),
+        servicesPickedTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_paragraph"]').last(),
+        servicesPickedWrapper: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_servicesWrapper"]'),
+        servicesPickedArray: () => this.elements.servicesPickedWrapper().find('[data-testid="item-servicesUnitFlow"]'),
+        servicesNotFoundMsg: () =>cy.get('[data-testid="p2-notFound-addNewItem"]'),
+        servicesCreateNew: () => cy.get('[data-testid="btn-addNewItem"]'),
 
         nextButton: () => cy.get("[data-testid=nextButton]"),
         cancelButton: () => cy.get("[data-testid=prevButton]"),
