@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "devDependencies": {
-    "@4tw/cypress-drag-drop": "^2.3.1",
-    "@faker-js/faker": "^10.3.0",
     "@shelex/cypress-allure-plugin": "^2.41.2",
     "@types/node": "^25.0.6",
     "allure-commandline": "^2.36.0",
@@ -16,8 +14,5 @@
     "test": "npx cypress run",
     "cy:open": "cypress open",
     "cy:run": "cypress run"
-  },
-  "dependencies": {
-    "cypress-real-events": "^1.15.0"
   }
 }
