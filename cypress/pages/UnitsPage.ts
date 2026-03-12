@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { routes } from '../constants/routes';
-export class UnitsPage {
+class UnitsPage {
   
   elements ={
     logo:() => cy.get('div[data-testid="logo"]').first(),

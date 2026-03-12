@@ -1,5 +1,4 @@
-import { routes } from '../constants/routes';
-export class ProductsPage {
+class ProductsPage {
   
   elements ={
     units:() => cy.get('div[data-testid="cardWrapper"]'),

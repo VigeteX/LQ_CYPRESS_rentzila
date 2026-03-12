@@ -128,25 +128,26 @@ describe('Login flow', () => {
         products.addUnits(56) 
         cy.visit(routes.OWNER_FAVORITE_UNITS);
 
+        const currentPage: string = 'is your current page'
         units.elements.previousPageButton().click()
-        units.elements.pageNumber().contains('1').should('be.visible').should('have.attr', 'aria-label').and('include', 'is your current page');
+        units.elements.pageNumber().contains('1').should('be.visible').should('have.attr', 'aria-label').and('include', currentPage);
         units.elements.previousPageButton().should('have.attr', 'aria-disabled').and('eq', 'true')
 
         units.elements.nextPageButton().click()
-        units.elements.pageNumber().contains('2').should('be.visible').should('have.attr', 'aria-label').and('include', 'is your current page');
+        units.elements.pageNumber().contains('2').should('be.visible').should('have.attr', 'aria-label').and('include', currentPage);
 
         units.elements.nextPageButton().click()
-        units.elements.pageNumber().contains('3').should('be.visible').should('have.attr', 'aria-label').and('include', 'is your current page');
+        units.elements.pageNumber().contains('3').should('be.visible').should('have.attr', 'aria-label').and('include', currentPage);
         
         units.elements.previousPageButton().click()
-        units.elements.pageNumber().contains('2').should('be.visible').should('have.attr', 'aria-label').and('include', 'is your current page');
+        units.elements.pageNumber().contains('2').should('be.visible').should('have.attr', 'aria-label').and('include', currentPage);
     
         units.elements.previousPageButton().click()
-        units.elements.pageNumber().contains('1').should('be.visible').should('have.attr', 'aria-label').and('include', 'is your current page');
+        units.elements.pageNumber().contains('1').should('be.visible').should('have.attr', 'aria-label').and('include', currentPage);
 
         units.clickNext(11);
 
-        units.elements.pageNumber().contains('12').should('be.visible').should('have.attr', 'aria-label').and('include', 'is your current page');
+        units.elements.pageNumber().contains('12').should('be.visible').should('have.attr', 'aria-label').and('include', currentPage);
     });
 
     it('C315 "Всі категорії" dropdown menu functionality', () => {
@@ -155,9 +156,9 @@ describe('Login flow', () => {
         });
 
         const categories = [
-            { url: '/budivelna-tekhnika/', selector: products.elements.constructionEquipmentCategory },
-            { url: '/komunalna-tekhnika/', selector: products.elements.municipalEquipmentCategory },
-            { url: '/skladska-tekhnika/', selector: products.elements.warehouseEquipmentCategory }
+            { url: routes.BUDIVELNA_TEKHNIKA, selector: products.elements.constructionEquipmentCategory },
+            { url: routes.KOMUNALNA_TEKHNIKA, selector: products.elements.municipalEquipmentCategory },
+            { url: routes.SKLADSKA_TEKHNIKA, selector: products.elements.warehouseEquipmentCategory }
         ];
 
         cy.visit(routes.PRODUCTS);

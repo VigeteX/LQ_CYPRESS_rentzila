@@ -1,4 +1,4 @@
-export class HeaderPage {
+class HeaderPage {
   
   elements ={
     enterButton:() => cy.get('div').contains("Вхід"),

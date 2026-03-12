@@ -1,4 +1,4 @@
-export class FooterPage {
+class FooterPage {
   
   elements ={
     logo:() => cy.get('div[data-testid="logo"]').first(),

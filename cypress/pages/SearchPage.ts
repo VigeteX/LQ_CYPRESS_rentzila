@@ -1,4 +1,4 @@
-export class SearchPage {
+class SearchPage {
   
   elements ={
     searchForm:() => cy.get('div[data-testid="searchForm"]').first(),
