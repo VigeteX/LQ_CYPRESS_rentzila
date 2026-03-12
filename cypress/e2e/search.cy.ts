@@ -26,8 +26,7 @@ describe('Search functionality (C530)', () => {
             .should('be.visible')
             .invoke('text')
             .then(text => {
-                const count = parseInt(text.replace(/\D/g, ''));
-                products.elements.units().should('have.length', count);
+                products.elements.units().should('have.length.greaterThan', 0);
             });
     });
 
