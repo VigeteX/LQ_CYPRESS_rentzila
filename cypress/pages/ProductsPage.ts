@@ -29,7 +29,6 @@ class ProductsPage {
   }
   private addUnitsRecursive(amount: number, index: number): void {
     if (index >= amount) return;
-
     this.elements.units().eq(index).within(() => {
       this.elements.favouriteButoon().find('path').last().then(($path) => {
         if (!$path.attr('fill')) {
