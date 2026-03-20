@@ -10,4 +10,6 @@ export const routes = {
   BUDIVELNA_TEKHNIKA: '/budivelna-tekhnika/',
   KOMUNALNA_TEKHNIKA: '/komunalna-tekhnika/',
   SKLADSKA_TEKHNIKA: '/skladska-tekhnika/',
+  CREATE_UNIT:'/create-unit/',
+  
 }

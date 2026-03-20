@@ -20,25 +20,47 @@ class ProductsPage {
     warehouseEquipment:() => cy.get('div[data-testid="skladska-tekhnika"]'),
 
     secondCategorySpan:() => cy.get('span[data-testid="secondCategorySpan"]'),
-    
+    preloader:()=> cy.get('div[data-testid="preloader"]'),
+    loading:()=> cy.get('div[class*="MapPagination_loading"]'),
+    unitsContainer:()=> cy.get('div[class*="MapPagination_units_container"]'),
   }
-  addUnits(amount: number){
-    this.elements.units().should('have.length.greaterThan', 0).then(() => {
-      this.addUnitsRecursive(amount, 0);
-    });
-  }
-  private addUnitsRecursive(amount: number, index: number): void {
-    if (index >= amount) return;
-    this.elements.units().eq(index).within(() => {
-      this.elements.favouriteButoon().find('path').last().then(($path) => {
-        if (!$path.attr('fill')) {
-          this.elements.favouriteButoon().click();
-          this.elements.favouriteButoon().find('path').last().should('have.attr', 'fill');
+  
+  addUnits(amount: number) {
+    cy.reload();
+    this.elements.preloader().should('not.exist');
+    this.elements.units().should('have.length.greaterThan', 0);
+    const processUnit = (index: number) => {
+      if (index >= amount) return;
+      this.elements.units().then($list => {
+        if ($list.length <= index) {
+          this.elements.unitsContainer().scrollTo('bottom');
+          this.elements.units().should('have.length.greaterThan', $list.length);
+          return processUnit(index);
         }
+        cy.wrap($list[index]).within(() => {
+          const clickUntilFilled = () => {
+            this.elements.favouriteButoon().then($btn => {
+              cy.wrap($btn).click({ force: true });
+              cy.wrap($btn).find('path').last().then($path => {
+                const fill = $path.attr('fill');
+                if (!fill || fill === 'none') {
+                  clickUntilFilled();
+                }
+              });
+            });
+          };
+          this.elements.favouriteButoon().find('path').last().then($path => {
+            const fill = $path.attr('fill');
+            if (!fill || fill === 'none') {
+              clickUntilFilled();
+            }
+          });
+        }).then(() => {
+          processUnit(index + 1);
+        });
       });
-    }).then(() => {
-      this.addUnitsRecursive(amount, index + 1);
-    });
+    };
+    processUnit(0);
   }
 }
 export default new ProductsPage();
