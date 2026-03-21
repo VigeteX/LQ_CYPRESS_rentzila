@@ -29,42 +29,43 @@ describe('Login flow', () => {
     });
 
     it('C322 Verify that the tabs are clickable.', () => {
-
-        Object.keys(unitButtons).forEach((cat) => {
-            units.elements.muiButton().contains(unitButtons[cat]).click()
+        cy.wrap(Object.keys(unitButtons)).each((cat: keyof typeof unitButtons) => {
+            units.elements.muiButton().contains(unitButtons[cat]).click();
             cy.get('body').then($body => {
-                const $units = $body.find(units.unitCardSelector);
-                if ($units.length > 0) {expect($units.length).to.be.greaterThan(0);
-                } else {units.elements.emptyUnitsTitle().contains(emptyUnitsTitles[cat]).should('be.visible');}
+                if ($body.find(units.unitCardSelector).length) {
+                    cy.get(units.unitCardSelector).should('have.length.greaterThan', 0);
+                } else {
+                    units.elements.emptyUnitsTitle().contains(emptyUnitsTitles[cat]).should('be.visible');
+                }
             });
         });
     });
 
     it('C323 Check filtering by category', () => {
-        
-        Object.keys(unitButtons).forEach((tab) => {
-
-            units.elements.muiButton().contains(unitButtons[tab]).click()
+        cy.wrap(Object.keys(unitButtons)).each((tab: keyof typeof unitButtons) => {
+            units.elements.muiButton().contains(unitButtons[tab]).click();
             cy.get('body').then($body => {
                 const $units = $body.find(units.unitCardSelector);
                 if ($units.length > 0) {
-
-                    let lastCategory = categoryLabels.all
-                    Object.keys(emptyCategoryUnitsTitles).forEach((cat) => {
-                        
-                        units.elements.customSelectDropdawn().contains(lastCategory).click()
-                        units.elements.customSelectOption().contains(categoryLabels[cat]).click()
+                    let lastCategory = categoryLabels.all;
+                    cy.wrap(Object.keys(emptyCategoryUnitsTitles)).each((cat: keyof typeof emptyCategoryUnitsTitles) => {
+                        units.elements.customSelectDropdawn().contains(lastCategory).click();
+                        units.elements.customSelectOption().contains(categoryLabels[cat]).click();
                         cy.get('body').then($body => {
                             const $units = $body.find(units.unitCardSelector);
                             if ($units.length > 0) {
-                                units.elements.unitCategory().first().invoke('text').then(text => text.trim()).should('match', allowedCategories[cat]);
-                            } else {units.elements.emptyUnitsTitle().contains(emptyCategoryUnitsTitles[cat]).should('be.visible');}
+                                units.elements.unitCategory().first().invoke('text').then(text => {
+                                    expect(text.trim()).to.match(allowedCategories[cat]);
+                                });
+                            } else {
+                                units.elements.emptyUnitsTitle().contains(emptyCategoryUnitsTitles[cat]).should('be.visible');
+                            }
                         });
-                        lastCategory = categoryLabels[cat]
+                        lastCategory = categoryLabels[cat];
+                    }).then(() => {
+                        units.elements.customSelectDropdawn().contains(lastCategory).click();
+                        units.elements.customSelectOption().contains(categoryLabels.all).click();
                     });
-                    units.elements.customSelectDropdawn().contains(lastCategory).click()
-                    units.elements.customSelectOption().contains(categoryLabels.all).click()
-
                 } else {units.elements.emptyUnitsTitle().contains(emptyUnitsTitles[tab]).should('be.visible');}
             });
         });

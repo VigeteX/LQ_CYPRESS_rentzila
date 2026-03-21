@@ -18,7 +18,10 @@ describe('Login flow', () => {
         header.elements.avatarIcon().should('be.visible');
         units.clearFavouriteUnits()
     });
-
+    type Category = {
+        url: string;
+        selector: () => Cypress.Chainable<any>;
+    };
     it('C300 The "Обрані оголошення" page without "Обрані" units', () => {
         cy.visit(routes.OWNER_FAVORITE_UNITS);
         units.elements.favouriteUnitsButton().click()
@@ -156,7 +159,7 @@ describe('Login flow', () => {
         cy.intercept('*', (req) => {
             console.log(req.method, req.url);
         });
-
+        
         const categories = [
             { url: routes.BUDIVELNA_TEKHNIKA, selector: products.elements.constructionEquipmentCategory },
             { url: routes.KOMUNALNA_TEKHNIKA, selector: products.elements.municipalEquipmentCategory },
@@ -164,7 +167,7 @@ describe('Login flow', () => {
         ];
 
         cy.visit(routes.PRODUCTS);
-        categories.forEach((cat) => {
+        cy.wrap(categories).each((cat: Category) => {
             products.elements.resetFilters().click();
             products.elements.preloader().should('not.exist');
             units.elements.units().should('have.length', 0);
@@ -251,7 +254,7 @@ describe('Login flow', () => {
         ];
 
         cy.visit(routes.PRODUCTS);
-        categories.forEach((cat) => {
+        cy.wrap(categories).each((cat: Category) => {
             products.elements.resetFilters().click();
             products.elements.preloader().should('not.exist');
             units.elements.units().should('have.length', 0);
@@ -324,7 +327,7 @@ describe('Login flow', () => {
         ];
 
         cy.visit(routes.PRODUCTS);
-        categories.forEach((cat) => {
+        cy.wrap(categories).each((cat: Category) => {
             products.elements.resetFilters().click();
             products.elements.preloader().should('not.exist');
             units.elements.units().should('have.length', 0);
