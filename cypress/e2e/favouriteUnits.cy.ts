@@ -6,7 +6,7 @@ import { validUser } from '../fixtures/login.data';
 import { routes } from '../constants/routes';
 import 'cypress-real-events';
 import { spaceInputs, specificSymbols2, nonExistingKeyword} from '../fixtures/search.data';
-import { unitsPlaceholders, messages, categoryLabels, allowedCategories } from '../constants/uiTexts';
+import { unitsPlaceholders, messages, categoryLabels, allowedCategories, sortLabels } from '../constants/uiTexts';
 
 describe('Login flow', () => {   
     beforeEach(() => {
@@ -18,7 +18,10 @@ describe('Login flow', () => {
         header.elements.avatarIcon().should('be.visible');
         units.clearFavouriteUnits()
     });
-
+    type Category = {
+        url: string;
+        selector: () => Cypress.Chainable<any>;
+    };
     it('C300 The "Обрані оголошення" page without "Обрані" units', () => {
         cy.visit(routes.OWNER_FAVORITE_UNITS);
         units.elements.favouriteUnitsButton().click()
@@ -46,7 +49,7 @@ describe('Login flow', () => {
         header.elements.avatarIcon().click()
         header.elements.profileDropdown().should('be.visible');
         header.elements.unitsButton().realHover();
-        header.elements.myUnitsButton().click()
+        header.elements.myUnitsButton().should('be.visible').click()
         cy.url().should('include', routes.OWNER_UNITS_PAGE)
         
         cy.then(() => {
@@ -77,7 +80,7 @@ describe('Login flow', () => {
         header.elements.avatarIcon().click();
         header.elements.profileDropdown().should('be.visible');
         header.elements.unitsButton().realHover();
-        header.elements.myUnitsButton().click()
+        header.elements.myUnitsButton().should('be.visible').click()
         units.elements.favouriteUnitsButton().click()
         
         units.elements.searchInput().click()
@@ -121,11 +124,13 @@ describe('Login flow', () => {
         header.elements.avatarIcon().click();
         header.elements.profileDropdown().should('be.visible');
         header.elements.unitsButton().realHover();
-        header.elements.myUnitsButton().click()
+        header.elements.myUnitsButton().should('be.visible').click()
         units.elements.favouriteUnitsButton().click()
         
         cy.visit(routes.PRODUCTS);
-        products.addUnits(56) 
+        
+        products.addUnits(56)
+
         cy.visit(routes.OWNER_FAVORITE_UNITS);
 
         const currentPage: string = 'is your current page'
@@ -154,7 +159,7 @@ describe('Login flow', () => {
         cy.intercept('*', (req) => {
             console.log(req.method, req.url);
         });
-
+        
         const categories = [
             { url: routes.BUDIVELNA_TEKHNIKA, selector: products.elements.constructionEquipmentCategory },
             { url: routes.KOMUNALNA_TEKHNIKA, selector: products.elements.municipalEquipmentCategory },
@@ -162,26 +167,29 @@ describe('Login flow', () => {
         ];
 
         cy.visit(routes.PRODUCTS);
-        categories.forEach((cat) => {
+        cy.wrap(categories).each((cat: Category) => {
             products.elements.resetFilters().click();
+            products.elements.preloader().should('not.exist');
+            units.elements.units().should('have.length', 0);
+
             products.elements.unitsCountLabel().then(($h1) => {
                 const oldCount = $h1.text();
                 cat.selector().click();
+                products.elements.preloader().should('not.exist');
+                units.elements.units().should('have.length', 0);
+
                 cy.url().should('include', cat.url);
-                
                 products.elements.unitsCountLabel().should(($h1Next) => {
                     expect($h1Next.text()).to.not.equal(oldCount);
                 });
-
                 products.addUnits(2);
             });
         });
 
-        header.elements.avatarIcon().should('be.visible');
-        header.elements.avatarIcon().click();
+        header.elements.avatarIcon().should('be.visible').click();
         header.elements.profileDropdown().should('be.visible');
         header.elements.unitsButton().realHover();
-        header.elements.myUnitsButton().click()
+        header.elements.myUnitsButton().should('be.visible').click()
         units.elements.favouriteUnitsButton().click()
 
         units.elements.customSelectDropdawn().contains(categoryLabels.all).should('be.visible')
@@ -195,6 +203,7 @@ describe('Login flow', () => {
             units.elements.customSelectOption().contains(categoryLabels.construction).click()
             units.elements.units().should('have.length.lessThan', pagesCount)
         });
+
         units.elements.units().first().click()
         cy.url().should('include', routes.UNIT)
 
@@ -218,7 +227,7 @@ describe('Login flow', () => {
             units.elements.customSelectOption().contains(categoryLabels.warehouse).click()
             units.elements.units().should('have.length.lessThan', pagesCount)
         });
-    
+
         units.elements.units().first().click()
         cy.url().should('include', routes.UNIT)
 
@@ -230,6 +239,141 @@ describe('Login flow', () => {
             units.elements.customSelectDropdawn().contains(categoryLabels.all).click()
             units.elements.customSelectOption().contains(categoryLabels.all).click()
             units.elements.units().should('have.length', pagesCount)
+        });
+    });
+
+    it('C316 "По даті створення" drop down menu functionality', () => {
+        cy.intercept('*', (req) => {
+            console.log(req.method, req.url);
+        });
+
+        const categories = [
+            { url: routes.BUDIVELNA_TEKHNIKA, selector: products.elements.constructionEquipmentCategory },
+            { url: routes.KOMUNALNA_TEKHNIKA, selector: products.elements.municipalEquipmentCategory },
+            { url: routes.SKLADSKA_TEKHNIKA, selector: products.elements.warehouseEquipmentCategory }
+        ];
+
+        cy.visit(routes.PRODUCTS);
+        cy.wrap(categories).each((cat: Category) => {
+            products.elements.resetFilters().click();
+            products.elements.preloader().should('not.exist');
+            units.elements.units().should('have.length', 0);
+
+            products.elements.unitsCountLabel().then(($h1) => {
+                const oldCount = $h1.text();
+                cat.selector().click();
+                products.elements.preloader().should('not.exist');
+                units.elements.units().should('have.length', 0);
+                cy.url().should('include', cat.url);
+                products.elements.unitsCountLabel().should(($h1Next) => {
+                    expect($h1Next.text()).to.not.equal(oldCount);
+                });
+                products.addUnits(2);
+            });
+        });
+
+        header.elements.avatarIcon().should('be.visible').click();
+        header.elements.profileDropdown().should('be.visible');
+        header.elements.unitsButton().realHover();
+        header.elements.myUnitsButton().should('be.visible').click()
+        
+        units.elements.favouriteUnitsButton().click()
+        cy.url().should('include', routes.OWNER_FAVORITE_UNITS)
+
+        units.elements.customSelectDropdawn().contains(sortLabels.data).should('be.visible')
+
+        units.elements.customSelectDropdawn().contains(sortLabels.data).click()
+        units.elements.customSelectOption().contains(sortLabels.name).click()
+        units.elements.customSelectDropdawn().contains(sortLabels.name).should('be.visible')
+        
+        units.loadAllUnits()
+        products.elements.preloader().should('not.exist');
+        const names: string[] = [];
+        units.elements.units().each(($card) => {
+        cy.wrap($card).find('div[class*="OwnerUnitCard_name"]').invoke('text').then((text) => names.push(text.trim()));
+        }).then(() => {
+            const sorted = [...names].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+            expect(names).to.deep.equal(sorted);
+        });
+
+        units.elements.customSelectDropdawn().contains(sortLabels.name).click()
+        units.elements.customSelectOption().contains(sortLabels.data).click()
+        units.elements.customSelectDropdawn().contains(sortLabels.data).should('be.visible')
+        
+        const dates: string[] = [];
+        units.elements.units().each(($card) => {
+        cy.wrap($card).find('div[class*="OwnerUnitCard_dateWithDot"]').invoke('text').then((text) => dates.push(text.trim()));
+        }).then(() => {
+            const cleanDate = (raw: string) => raw.replace(/^[^\d]+/, '');
+            const parseDate = (dateStr: string): number => {
+                const cleaned = cleanDate(dateStr);
+                const [day, month, year] = cleaned.split('.').map(Number);
+                return new Date(year, month - 1, day).getTime();
+            };
+            const sortedDesc = [...dates].sort((a, b) => parseDate(b) - parseDate(a));
+            expect(dates).to.deep.equal(sortedDesc);
+        });
+    });
+
+    it('C303 "Очистити список" button functionality', () => {
+        cy.intercept('*', (req) => {
+            console.log(req.method, req.url);
+        });
+
+        const categories = [
+            { url: routes.BUDIVELNA_TEKHNIKA, selector: products.elements.constructionEquipmentCategory },
+            { url: routes.KOMUNALNA_TEKHNIKA, selector: products.elements.municipalEquipmentCategory },
+            { url: routes.SKLADSKA_TEKHNIKA, selector: products.elements.warehouseEquipmentCategory }
+        ];
+
+        cy.visit(routes.PRODUCTS);
+        cy.wrap(categories).each((cat: Category) => {
+            products.elements.resetFilters().click();
+            products.elements.preloader().should('not.exist');
+            units.elements.units().should('have.length', 0);
+            
+            products.elements.unitsCountLabel().then(($h1) => {
+                const oldCount = $h1.text();
+                cat.selector().click();
+                products.elements.preloader().should('not.exist');
+                units.elements.units().should('have.length', 0);
+                
+                cy.url().should('include', cat.url);
+                products.elements.unitsCountLabel().should(($h1Next) => {
+                    expect($h1Next.text()).to.not.equal(oldCount);
+                });
+                products.addUnits(2);
+            });
+        });
+
+        header.elements.avatarIcon().should('be.visible').click();
+        header.elements.profileDropdown().should('be.visible');
+        header.elements.unitsButton().realHover();
+        header.elements.myUnitsButton().should('be.visible').click()
+        units.elements.favouriteUnitsButton().click()
+
+        units.elements.clearFavouriteUnitsButton().click();
+        units.elements.popup().should('be.visible');
+        units.elements.lightRedBtn().click();
+        units.elements.popup().should('not.exist');
+
+        units.elements.clearFavouriteUnitsButton().click();
+        units.elements.popup().should('be.visible');
+        units.elements.popupCrossIcon().click();
+        units.elements.popup().should('not.exist');
+
+        units.elements.clearFavouriteUnitsButton().click();
+        units.elements.popup().should('be.visible');
+        units.elements.darkBlueBtn().click()
+        units.elements.popup().should('not.exist');
+        units.elements.noFavouriteUnitsLabel().should('be.visible');
+        units.elements.emptyBlockButton().should('be.visible')
+
+        units.elements.emptyBlockButton().click()
+        cy.url().should('include', routes.PRODUCTS)
+
+        products.elements.units().first().within(() => {
+            products.elements.favouriteButoon().find('path').last().should('not.have.attr', 'fill');
         });
     });
 });
