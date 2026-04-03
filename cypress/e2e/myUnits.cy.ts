@@ -4,7 +4,8 @@ import units from '../pages/UnitsPage';
 import { validUser } from '../fixtures/login.data';
 import { routes } from '../constants/routes';
 import 'cypress-real-events';
-import { categoryLabels, allowedCategories, unitButtons, emptyUnitsTitles, emptyCategoryUnitsTitles } from '../constants/uiTexts';
+import { categoryLabels, allowedCategories, unitButtons, emptyUnitsTitles, emptyCategoryUnitsTitles, sortLabels, messages } from '../constants/uiTexts';
+import { unitSearch } from '../fixtures/search.data';
 
 describe('Login flow', () => {   
     beforeEach(() => {
@@ -65,6 +66,93 @@ describe('Login flow', () => {
                     }).then(() => {
                         units.elements.customSelectDropdawn().contains(lastCategory).click();
                         units.elements.customSelectOption().contains(categoryLabels.all).click();
+                    });
+                } else {units.elements.emptyUnitsTitle().contains(emptyUnitsTitles[tab]).should('be.visible');}
+            });
+        });
+    });
+
+    it('C324 Check sorting units', () => {
+        units.elements.muiButton().contains(unitButtons.waiting).click();
+
+        units.elements.customSelectDropdawn().contains(sortLabels.data).click();
+        units.elements.customSelectOption().contains(sortLabels.name).click()
+        units.elements.customSelectDropdawn().contains(sortLabels.name).should('be.visible')
+        
+        units.loadAllUnits()
+
+        const names: string[] = [];
+        units.elements.units().each(($card) => {
+        cy.wrap($card).find('div[class*="OwnerUnitCard_name"]').invoke('text').then((text) => names.push(text.trim()));
+        }).then(() => {
+            const sorted = [...names].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+            expect(names).to.deep.equal(sorted);
+        });
+
+        units.elements.customSelectDropdawn().contains(sortLabels.name).click()
+        units.elements.customSelectOption().contains(sortLabels.data).click()
+        units.elements.customSelectDropdawn().contains(sortLabels.data).should('be.visible')
+        
+        const dates: string[] = [];
+        units.elements.units().each(($card) => {
+        cy.wrap($card).find('div[class*="OwnerUnitCard_dateWithDot"]').invoke('text').then((text) => dates.push(text.trim()));
+        }).then(() => {
+            const cleanDate = (raw: string) => raw.replace(/^[^\d]+/, '');
+            const parseDate = (dateStr: string): number => {
+                const cleaned = cleanDate(dateStr);
+                const [day, month, year] = cleaned.split('.').map(Number);
+                return new Date(year, month - 1, day).getTime();
+            };
+            const sortedDesc = [...dates].sort((a, b) => parseDate(b) - parseDate(a));
+            expect(dates).to.deep.equal(sortedDesc);
+        });
+    });
+
+    it('C325 "Заголовок оголошення" search field functionality.', () => {
+        units.elements.muiButton().contains(unitButtons.waiting).click();
+        units.elements.searchInput().type('{enter}');
+        units.elements.units().should('have.length.greaterThan', 0);
+
+        cy.wrap(Object.keys(unitButtons)).each((tab: keyof typeof unitButtons) => {
+            units.elements.muiButton().contains(unitButtons[tab]).click();
+            cy.get('body').then($body => {
+                const $units = $body.find(units.unitCardSelector);
+                if ($units.length > 0) {
+                    cy.wrap(unitSearch).each((text: string) => {
+                        cy.wrap(text.split('')).each((letter: string) => {
+                            units.elements.searchInput().type(letter).invoke('val').then((currentValue: any) => {
+                                const typedSoFar = (currentValue as string).toLowerCase();
+                                cy.get('body').then($body => {
+                                    const $units = $body.find(units.unitCardSelector);
+                                    if ($units.length > 0) {
+                                        units.elements.units().each(($card) => {
+                                            cy.wrap($card).find('div[class*="OwnerUnitCard_name"]').invoke('text').then((elementText) => {
+                                                const lowText = elementText.toLowerCase();
+                                                expect(lowText).to.contain(typedSoFar);
+                                            });
+                                        })
+                                    } else {units.elements.emptyUnitsTitle().contains(messages.noUnitsByName(currentValue)).should('exist')}
+                                });
+                            });
+                        });
+                        cy.wrap(text.split('')).each(() => {
+                            units.elements.searchInput().type('{backspace}').invoke('val').then((currentValue: any) => {
+                                const typedSoFar = (currentValue as string).toLowerCase();
+                                cy.get('body').then($body => {
+                                    const $units = $body.find(units.unitCardSelector);
+                                    if ($units.length > 0) {
+                                        units.elements.units().each(($card) => {
+                                            cy.wrap($card).find('div[class*="OwnerUnitCard_name"]').invoke('text').then((elementText) => {
+                                                const lowText = elementText.toLowerCase();
+                                                expect(lowText).to.contain(typedSoFar);
+                                            });
+                                        })
+                                    } else {units.elements.emptyUnitsTitle().contains(messages.noUnitsByName(currentValue)).should('exist')}
+                                });
+                            });
+                        });
+                        units.elements.units().should('have.length.greaterThan', 0);
+                        units.elements.searchInput().should('have.value', '');
                     });
                 } else {units.elements.emptyUnitsTitle().contains(emptyUnitsTitles[tab]).should('be.visible');}
             });

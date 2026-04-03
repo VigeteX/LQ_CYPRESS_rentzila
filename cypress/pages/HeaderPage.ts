@@ -27,8 +27,13 @@ class HeaderPage {
     searchForm:() => cy.get('div[data-testid="searchForm"]').first(),
     serchResultContainer:() => cy.get('div[data-testid="container"]').should('exist').parent().children('div').eq(2),
 
-    productsButton:() => cy.get('a[href="/products/"]')
+    productsButton:() => cy.get('a[href="/products/"]'),
+
+    mapButton:() => cy.get('div[data-testid="mapButton""]'),
     
+    navbarCatalog:() => cy.get('div[class*="NavbarCatalog_wrapper"]'),
+    catalogParent:() => cy.get('div[class*="Catalog_parent"]'),
+    catalogItem:() => cy.get('div[class*="CatalogItem_item"]'),
   }
 }
 export default new HeaderPage();
