@@ -16,7 +16,7 @@ describe('Services tab functionality', () => {
         createUnitPage.elements.techPhotosMainPhotoTitle().should("be.visible")
         createUnitPage.elements.nextButton().click();
     })
-    it.skip('C409: Verify input section and choosing of existing service', () => {
+    it('C409: Verify input section and choosing of existing service', () => {
         createUnitPage.elements.servicesInputTitle()
             .should('be.visible')
             .and('have.text', servicesTextConstants.servicesInputTitle);
@@ -92,7 +92,7 @@ describe('Services tab functionality', () => {
                  });
          });
     });
-    it.skip('C410: Verify creating new service', () => {
+    it('C410: Verify creating new service', () => {
         const testServiceName = faker.lorem.words(2);
 
         createUnitPage.elements.servicesInput().type(testServiceName);
@@ -110,7 +110,7 @@ describe('Services tab functionality', () => {
 
         createUnitPage.elements.servicesPickedArray().should('be.visible').and('have.text', testServiceName);
     });
-    it.skip('C411: Verify choosing multiple services', () => {
+    it('C411: Verify choosing multiple services', () => {
         const searchSymbol: string = 'Г'
         createUnitPage.elements.servicesInput()
             .clear()
