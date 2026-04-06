@@ -133,15 +133,45 @@ class CreateUnitPage extends Page {
         servicesInput: () => this.elements.servicesSearchResult().find('input'),
         servicesInputSearchResultsDropdown: () => this.elements.servicesSearchResult().find('[class*="ServicesUnitFlow_searchedServicesCatWrapper"]'),
         servicesInputSearchResultsArray: () => this.elements.servicesInputSearchResultsDropdown().find('[data-testid="searchItem-servicesUnitFlow"]'),
-        servicesPickedTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_paragraph"]').last(),
+        servicesToChooseTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_paragraph"]'),
+        servicesPickedTitle: () => this.elements.servicesWrapper().contains('Послуги, які надає технічний засіб: '),
         servicesPickedWrapper: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_servicesWrapper"]'),
         servicesPickedArray: () => this.elements.servicesPickedWrapper().find('[data-testid="item-servicesUnitFlow"]'),
         servicesNotFoundMsg: () =>cy.get('[data-testid="p2-notFound-addNewItem"]'),
         servicesCreateNew: () => cy.get('[data-testid="btn-addNewItem"]'),
 
+        //Prices tab locators
+        pricesWrapper: () => cy.get('[class*="PricesUnitFlow_priceWrapper"]'),
+        pricesPaymentMethodTitle: () => this.elements.pricesWrapper().find('[class*="PricesUnitFlow_paragraph"]').first(),
+        pricesPaymentMethodInput: () => this.elements.pricesWrapper().find('[data-testid="div_CustomSelect"]'),
+        pricesPaymentMethodInputText: () => this.elements.pricesPaymentMethodInput().find('span[class*="CustomSelect_value"]'),
+        pricesPaymentMethodDropdown: () => this.elements.pricesWrapper().find('[data-testid="listItems-customSelect"]'),
+        pricesPaymentMethodDropdownResultsArray: () => this.elements.pricesPaymentMethodDropdown().find('span[data-testid="span-customSelect"]'),
+        pricesMinimumPaymentTitle: () => this.elements.pricesWrapper().find('[class*="PricesUnitFlow_paragraph"]').eq(1),
+        pricesMinimumPaymentInputWrapper: () => this.elements.pricesWrapper().find('[class*="PricesUnitFlow_unitPriceWrapper"]'),
+        pricesMinimumPaymentInput: () => this.elements.pricesMinimumPaymentInputWrapper().find('input[class*="RowUnitPrice_priceInput"]'),
+        pricesMinimumPaymentCurrencyInput: () => this.elements.pricesMinimumPaymentInputWrapper().find('input[class*="RowUnitPrice_currencyText"]'),
+
+
+
         nextButton: () => cy.get("[data-testid=nextButton]"),
         cancelButton: () => cy.get("[data-testid=prevButton]"),
     };
+
+    pickRandomService(searchText: string) {
+        this.elements.servicesInput()
+            .clear()
+            .type(searchText);
+
+        this.elements.servicesInputSearchResultsDropdown().should('be.visible');
+
+        this.elements.servicesInputSearchResultsArray().then(results => {
+            const arrLength = results.length;
+            const randomIndex = Cypress._.random(0, arrLength - 1);
+
+            cy.wrap(results[randomIndex]).click();
+        });
+    }
 
     /**
      * Clicks a random element from the provided Cypress element getter.

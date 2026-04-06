@@ -24,5 +24,14 @@
   "techVehiclePhotosTitle": "Фото технічного засобу *",
   "techVehiclePhotosDescription": "Додайте в оголошення від 1 до 12 фото технічного засобу розміром до 20 МВ у форматі .jpg, .jpeg, .png. Перше фото буде основним.",
   "techPhotosMainPhotoText": "Головне",
-  "techPhotosPopupSaveButtonText": "Зрозуміло"
+  "techPhotosPopupSaveButtonText": "Зрозуміло",
+  "paymentMethodTitle": "Спосіб оплати *",
+  "defaultCurrency": "UAH",
+  "paymentMethods": [
+    "Готівкою / на картку",
+    "Безготівковий розрахунок (без ПДВ)",
+    "Безготівковий розрахунок (з ПДВ)"
+  ],
+  "minimumPaymentTitle": "Вартість мінімального замовлення *",
+  "minimumPaymentInputPlaceholderText": "Наприклад, 1000"
 }
