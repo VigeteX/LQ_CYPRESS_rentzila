@@ -133,7 +133,7 @@ class CreateUnitPage extends Page {
         servicesInput: () => this.elements.servicesSearchResult().find('input'),
         servicesInputSearchResultsDropdown: () => this.elements.servicesSearchResult().find('[class*="ServicesUnitFlow_searchedServicesCatWrapper"]'),
         servicesInputSearchResultsArray: () => this.elements.servicesInputSearchResultsDropdown().find('[data-testid="searchItem-servicesUnitFlow"]'),
-        servicesToChooseTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_paragraph"]'),
+        servicesToChooseTitle: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_paragraph"]').first(),
         servicesPickedTitle: () => this.elements.servicesWrapper().contains('Послуги, які надає технічний засіб: '),
         servicesPickedWrapper: () => this.elements.servicesWrapper().find('[class*="ServicesUnitFlow_servicesWrapper"]'),
         servicesPickedArray: () => this.elements.servicesPickedWrapper().find('[data-testid="item-servicesUnitFlow"]'),

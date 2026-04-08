@@ -82,7 +82,7 @@ describe('Services tab functionality', () => {
 
                      const trimmedName:string = pickedServiceName.trim();
 
-                     createUnitPage.elements.servicesToChooseTitle()
+                     createUnitPage.elements.servicesPickedTitle()
                          .should('be.visible')
                          .and('have.text', servicesTextConstants.pickedServicesTitle);
 
