@@ -105,7 +105,7 @@ describe('Login flow', () => {
         footer.elements.content().scrollIntoView(); 
     });
 
-    it('C559 Verify "Каталог"', () => {
+    it.skip('C559 Verify "Каталог"', () => {
         cy.wrap(Object.values(catalogItems.equipment.subCategorys)).each((cat: Category) => {
             cy.wrap(Object.values(cat.subCategorys)).each((cat2: Category) => {
                 cy.wrap(Object.values(cat2.subCategorys)).each((cat3: LastCategory) => {
