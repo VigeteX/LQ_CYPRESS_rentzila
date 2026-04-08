@@ -2,13 +2,23 @@ import header from '../pages/HeaderPage';
 import footer from '../pages/FooterPage';
 import { routes } from '../constants/routes';
 import { footerPlaceholders } from '../constants/uiTexts';
+import { Dictionary } from 'cypress/types/lodash';
+import { catalogItems } from '../fixtures/catalog.data';
 
 describe('Login flow', () => {   
     beforeEach(() => {
         cy.viewport(1920, 1080);
         cy.visit('/');
     });
-
+    type Category = {
+        url: string;
+        label: string;
+        subCategorys: Dictionary<Category | LastCategory>;
+    };
+    type LastCategory = {
+        url: string;
+        label: string;
+    };
     it('C212 Checking "Послуги" section on the main page', () => {
         header.elements.servicesSectionCategoriesList().children('div').then($cats => {
             
@@ -95,4 +105,27 @@ describe('Login flow', () => {
         footer.elements.content().scrollIntoView(); 
     });
 
+    it('C559 Verify "Каталог"', () => {
+        cy.wrap(Object.values(catalogItems.equipment.subCategorys)).each((cat: Category) => {
+            cy.wrap(Object.values(cat.subCategorys)).each((cat2: Category) => {
+                cy.wrap(Object.values(cat2.subCategorys)).each((cat3: LastCategory) => {
+                    header.elements.navbarCatalog().click()
+                    header.elements.catalogParent().contains(catalogItems.equipment.label).trigger('mouseover');
+                    header.elements.catalogItem().contains(cat.label).scrollIntoView().should('be.visible').trigger('mouseover');
+                    header.elements.catalogItem().contains(cat2.label).scrollIntoView().should('be.visible').trigger('mouseover');
+                    header.elements.catalogItem().contains(cat3.label).scrollIntoView().click();
+                    cy.url({ timeout: 15000 }).should('include', cat3.url);
+                });
+                header.elements.navbarCatalog().click()
+                header.elements.catalogParent().contains(catalogItems.equipment.label).trigger('mouseover');
+                header.elements.catalogItem().contains(cat.label).scrollIntoView().should('be.visible').trigger('mouseover');
+                header.elements.catalogItem().contains(cat2.label).scrollIntoView().click();
+                cy.url({ timeout: 15000 }).should('include', cat2.url);
+            });
+            header.elements.navbarCatalog().click()
+            header.elements.catalogParent().contains(catalogItems.equipment.label).should('be.visible').trigger('mouseover');
+            header.elements.catalogItem().contains(cat.label).scrollIntoView().click();
+            cy.url({ timeout: 15000 }).should('include', cat.url);
+        });
+    });
 });

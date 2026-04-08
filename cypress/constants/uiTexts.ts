@@ -32,8 +32,14 @@ export const emptyCategoryUnitsTitles = {
 
 
 export const messages = {
-  noUnitsByName: (name: string) =>
-    `Оголошення за назвою "${name}" не знайдені`,
+  noUnitsByName: (name: string) => {
+    let processedName = name.replace(/\s{2,}/g, ' ');
+
+    if (processedName.length > 50) {
+      processedName = processedName.substring(0, 50) + '...';
+    }
+    return `Оголошення за назвою "${processedName}" не знайдені`;
+  },
 };
 
 export const authErrorMessages = {

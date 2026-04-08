@@ -23,6 +23,9 @@ class ProductsPage {
     preloader:()=> cy.get('div[data-testid="preloader"]'),
     loading:()=> cy.get('div[class*="MapPagination_loading"]'),
     unitsContainer:()=> cy.get('div[class*="MapPagination_units_container"]'),
+
+    homeMap:()=> cy.get('div[class*="MapPage_homeMap"]'),
+    
   }
   
   addUnits(amount: number) {
