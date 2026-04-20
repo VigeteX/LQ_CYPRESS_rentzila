@@ -1,6 +1,7 @@
 import createUnitPage from "../pageObjects/CreateUnitPage.page";
 import {faker} from "@faker-js/faker";
 import servicesTextConstants from "../constants/servicesTab.constants.json"
+import createUnitFormFieldsText from "../constants/createUnitFormFields.constants.json";
 
 describe('Services tab functionality', () => {
     beforeEach(() => {
@@ -89,7 +90,7 @@ describe('Services tab functionality', () => {
                          .should('be.visible')
                          .and('contain.text', trimmedName);
                  });
-         })
+         });
     });
     it('C410: Verify creating new service', () => {
         const testServiceName = faker.lorem.words(2);
@@ -97,7 +98,7 @@ describe('Services tab functionality', () => {
         createUnitPage.elements.servicesInput().type(testServiceName);
         createUnitPage.elements.servicesNotFoundMsg()
             .should('be.visible')
-            .and('contain.text', servicesTextConstants.serviceNotFoundMsg.replace("{serviceName}", testServiceName))
+            .and('contain.text', servicesTextConstants.serviceNotFoundMsg.replace("{serviceName}", testServiceName));
 
         createUnitPage.elements.servicesCreateNew()
             .find('svg')
@@ -108,14 +109,14 @@ describe('Services tab functionality', () => {
             .click();
 
         createUnitPage.elements.servicesPickedArray().should('be.visible').and('have.text', testServiceName);
-    })
-    it('C410: Verify creating new service', () => {
+    });
+    it('C411: Verify choosing multiple services', () => {
         const searchSymbol: string = 'Г'
         createUnitPage.elements.servicesInput()
             .clear()
             .type(searchSymbol);
 
-        createUnitPage.elements.servicesInputSearchResultsDropdown().should('be.visible')
+        createUnitPage.elements.servicesInputSearchResultsDropdown().should('be.visible');
 
         createUnitPage.elements.servicesInputSearchResultsArray().then(results => {
             const arrLength = results.length;
@@ -123,7 +124,7 @@ describe('Services tab functionality', () => {
 
             const shuffledResults = Cypress._.shuffle(results.toArray());
             const randomChoices = shuffledResults.slice(0, randomAmount);
-            const randomChoicesTextArray = []
+            const randomChoicesTextArray = [];
 
             cy.wrap(randomChoices).each(($el, index, $list) => {
                 cy.wrap($el)
@@ -135,14 +136,116 @@ describe('Services tab functionality', () => {
                         cy.wrap($el)
                             .click()
                             .find('path')
-                            .should('have.attr', 'd', servicesTextConstants.servicePickedMarkAttribute)
-                    })
-            })
+                            .should('have.attr', 'd', servicesTextConstants.servicePickedMarkAttribute);
+                    });
+            });
 
             createUnitPage.elements.servicesPickedArray().then(($pickedServicesArr) => {
                 const secondArrTexts = Cypress._.map($pickedServicesArr, 'innerText').map(text => text.trim());
                 expect(secondArrTexts).to.deep.equal(randomChoicesTextArray);
             });
+        });
+    });
+    it('C412: Verify removing variants from choosed list', () => {
+        const searchSymbol: string = 'Г'
+        createUnitPage.elements.servicesInput()
+            .clear()
+            .type(searchSymbol);
+
+        createUnitPage.elements.servicesInputSearchResultsDropdown().should('be.visible');
+
+        createUnitPage.elements.servicesInputSearchResultsArray().then(results => {
+            const arrLength = results.length;
+            const randomAmount = Cypress._.random(1, arrLength);
+
+            const shuffledResults = Cypress._.shuffle(results.toArray());
+            const randomChoices = shuffledResults.slice(0, randomAmount);
+            const randomChoicesTextArray = [];
+
+            cy.wrap(randomChoices).each(($el, index, $list) => {
+                cy.wrap($el)
+                    .invoke('text')
+                    .then((pickedServiceName) => {
+                        randomChoicesTextArray.push(pickedServiceName.trim());
+                    })
+                    .then(() => {
+                        cy.wrap($el)
+                            .click()
+                            .find('path')
+                            .should('have.attr', 'd', servicesTextConstants.servicePickedMarkAttribute);
+                    });
+            });
+
+            createUnitPage.elements.servicesPickedArray().then(($pickedServicesArr) => {
+                const secondArrTexts = Cypress._.map($pickedServicesArr, 'innerText').map(text => text.trim());
+                expect(secondArrTexts).to.deep.equal(randomChoicesTextArray);
+            });
+        });
+
+        createUnitPage.elements.servicesPickedArray().each(($pickedService, index, $list) => {
+            const lastElement = $list.length - 1;
+
+            cy.wrap($pickedService)
+                .should('be.visible')
+                .find('[data-testid="remove-servicesUnitFlow"]')
+                .click()
+                .should('not.exist');
+
+            if (index === lastElement) {
+                createUnitPage.elements.servicesPickedTitle().should('not.exist');
+            } else {
+                createUnitPage.elements.servicesPickedTitle().should('be.visible');
+            }
+        });
+    });
+    it('C413: Verify "Назад" button', () => {
+        createUnitPage.elements.cancelButton()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.gobackButtonTitle)
+            .click();
+
+        createUnitPage.elements.tabs().each(($tab, index) => {
+            cy.wrap($tab).should('have.text', createUnitFormFieldsText.tabs[index]);
+            if(index === 1){
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'true');
+            }
+            else {
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'false');
+            }
+        });
+    });
+    it('С414: Verify "Далі" button', () => {
+        createUnitPage.elements.nextButton()
+            .should('be.visible')
+            .and('have.text', createUnitFormFieldsText.nextButtonTitle)
+            .click();
+
+        createUnitPage.elements.tabs().each(($tab, index) => {
+            cy.wrap($tab).should('have.text', createUnitFormFieldsText.tabs[index]);
+            if(index === 2){
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'true');
+            }
+            else {
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'false');
+            }
+        });
+
+        createUnitPage.elements.servicesInputClueLine()
+            .should('have.attr', 'class')
+            .and('include', 'ServicesUnitFlow_error')
+
+        createUnitPage.pickRandomService("Г");
+
+        createUnitPage.elements.nextButton().click();
+
+        createUnitPage.elements.tabs().each(($tab, index) => {
+            cy.wrap($tab).should('have.text', createUnitFormFieldsText.tabs[index]);
+            if(index === 3){
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'true');
+            }
+            else {
+                cy.wrap($tab).should('have.attr', 'aria-selected', 'false');
+            }
         });
     });
 });
