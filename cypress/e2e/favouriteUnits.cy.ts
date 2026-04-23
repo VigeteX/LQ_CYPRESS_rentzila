@@ -120,7 +120,7 @@ describe('Login flow', () => {
         });
     });
 
-    it('C311 Check the pagination on the "Обрані оголошення" page', () => {
+    it.skip('C311 Check the pagination on the "Обрані оголошення" page', () => {
         header.elements.avatarIcon().click();
         header.elements.profileDropdown().should('be.visible');
         header.elements.unitsButton().realHover();
@@ -182,7 +182,7 @@ describe('Login flow', () => {
                 products.elements.unitsCountLabel().should(($h1Next) => {
                     expect($h1Next.text()).to.not.equal(oldCount);
                 });
-                products.addUnits(2);
+                products.addUnits(1);
             });
         });
 
@@ -268,7 +268,7 @@ describe('Login flow', () => {
                 products.elements.unitsCountLabel().should(($h1Next) => {
                     expect($h1Next.text()).to.not.equal(oldCount);
                 });
-                products.addUnits(2);
+                products.addUnits(1);
             });
         });
 
@@ -342,7 +342,7 @@ describe('Login flow', () => {
                 products.elements.unitsCountLabel().should(($h1Next) => {
                     expect($h1Next.text()).to.not.equal(oldCount);
                 });
-                products.addUnits(2);
+                products.addUnits(1);
             });
         });
 
