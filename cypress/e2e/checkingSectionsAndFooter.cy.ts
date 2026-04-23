@@ -2,7 +2,6 @@ import header from '../pages/HeaderPage';
 import footer from '../pages/FooterPage';
 import { routes } from '../constants/routes';
 import { footerPlaceholders } from '../constants/uiTexts';
-import { Dictionary } from 'cypress/types/lodash';
 import { catalogItems } from '../fixtures/catalog.data';
 
 describe('Login flow', () => {   
@@ -13,27 +12,25 @@ describe('Login flow', () => {
     type Category = {
         url: string;
         label: string;
-        subCategorys: Dictionary<Category | LastCategory>;
+        subCategorys: _.Dictionary<Category | LastCategory>;
     };
     type LastCategory = {
         url: string;
         label: string;
     };
     it('C212 Checking "Послуги" section on the main page', () => {
-        header.elements.servicesSectionCategoriesList().children('div').then($cats => {
-            
-            for (let i = 0; i < $cats.length; i++) {
-                header.elements.servicesSectionProposesList().children('div').then($props => {
-                    
-                    for (let j = 0; j < $props.length; j++) {
-                        header.elements.servicesSectionTitle().scrollIntoView();
-                        header.elements.servicesSectionCategoriesList().children('div',).eq(i).click();
-                        header.elements.servicesSectionProposesList().children('div',).eq(j).click();
+        header.elements.servicesSectionCategoriesList().children('div').each(($cat, i) => {
+            header.elements.servicesSectionCategoriesList().children('div').eq(i).click();
+            header.elements.servicesSectionProposesList().children('div').then(($props) => {
+                const propCount = $props.length;
 
-                        header.elements.logo().click();
-                    }
-                });
-            }
+                for (let j = 0; j < propCount; j++) {
+                    header.elements.servicesSectionTitle().scrollIntoView();
+                    header.elements.servicesSectionCategoriesList().children('div').eq(i).click();
+                    header.elements.servicesSectionProposesList().children('div').eq(j).click();
+                    header.elements.logo().click();
+                }
+            });
         });
     });
     it('C213 Checking "Спецтехніка" section on the main page', () => {
