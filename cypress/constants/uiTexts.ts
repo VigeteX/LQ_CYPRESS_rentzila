@@ -7,9 +7,21 @@ export const unitsPlaceholders = {
   unitTitle: 'Заголовок оголошення',
 };
 
+export const createUnitsPlaceholders = {
+  nextButton: 'Далі',
+  enterUnitNameInput: 'Введіть назву оголошення',
+};
+
 export const searchMessages = {
   zeroResults: "Знайдено 0",
 };
+
+export const tabNames = ["Основна інформація", "Фотографії", "Послуги", "Вартість", "Контакти"];
+export const errorMessages = {
+  double: "Ви не можете завантажити двічі один файл.",
+  notValid: "Формат зображення не підтримується. Допустимі формати: .jpg, .jpeg, .png. Ви не можете завантажити файл більше 20 МВ.",
+}
+
 
 export const unitButtons = {
   active: "Активні",

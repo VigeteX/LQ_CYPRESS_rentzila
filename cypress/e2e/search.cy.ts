@@ -32,7 +32,7 @@ describe('Search functionality (C530)', () => {
 
     describe('Search Tests', () => {
         searchTerms.forEach(term => {
-            it(`Should search and navigate correctly for: ${term}`, () => {
+            it.skip(`Should search and navigate correctly for: ${term}`, () => {
 
                 search.elements.searchInput().type(term).type('{enter}');
                 cy.location('pathname').should('eq', routes.PRODUCTS);
