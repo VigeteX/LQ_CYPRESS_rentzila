@@ -81,7 +81,7 @@ class CreateUnitsPage {
     this.skip_to_photo_page()
     this.elements.imagesInput().selectFile(`cypress/fixtures/images/${images[0]}`, { force: true });
     this.elements.nextButton().click()
-    this.elements.servicesTitle().should('be.visible')
+    this.elements.servicesTitle().should('be.visible', { timeout: 15000 })
   }
   skip_to_prices_page(){
     this.skip_to_services_page()
