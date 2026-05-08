@@ -18,7 +18,7 @@ describe('Login flow', () => {
         cy.visit(routes.CREATE_UNIT);
     });
 
-    it.skip('C329 Verify "Далі" button', () => {
+    it('C329 Verify "Далі" button', () => {
         create.elements.nextButton().should('contain', createUnitsPlaceholders.nextButton)
         create.elements.nextButton().click()
 
@@ -57,7 +57,7 @@ describe('Login flow', () => {
 
     });
 
-    it.skip('C367 Verify image upload panels', () => {
+    it('C367 Verify image upload panels', () => {
         create.skip_to_photo_page()
 
         create.elements.photoTitle().should('be.visible')
@@ -93,7 +93,7 @@ describe('Login flow', () => {
         });
     });
 
-    it.skip('C384 Verify same images uploading', () => {
+    it('C384 Verify same images uploading', () => {
         create.skip_to_photo_page()
 
         create.doubleImageUpload()
@@ -112,7 +112,7 @@ describe('Login flow', () => {
         create.elements.popup().should('not.exist')
     });
 
-    it.skip('C401 Verify uploading of invalid file type', () => {
+    it('C401 Verify uploading of invalid file type', () => {
         create.skip_to_photo_page()
 
         create.elements.imagesInput().selectFile(`cypress/fixtures/images/${notimage[0]}`, { force: true });
@@ -131,7 +131,7 @@ describe('Login flow', () => {
         create.elements.popup().should('not.exist')
     });
     
-    it.skip('C405 Verify uploading of invalid size file', () => {
+    it('C405 Verify uploading of invalid size file', () => {
         create.skip_to_photo_page()
 
         create.elements.imagesInput().selectFile(`cypress/fixtures/images/${bigimage[0]}`, { force: true });
@@ -173,7 +173,7 @@ describe('Login flow', () => {
         });
     });
 
-    it.skip('C413 Verify "Назад" button', () => {
+    it('C413 Verify "Назад" button', () => {
         create.skip_to_services_page()
         create.elements.prevButton().should('contain', createUnitsPlaceholders.prevButton)
 
@@ -181,7 +181,7 @@ describe('Login flow', () => {
         create.elements.photoTitle().should('be.visible')
     });
 
-    it.skip('C414 Verify "Далі" button', () => {
+    it('C414 Verify "Далі" button', () => {
         create.skip_to_services_page()
         create.elements.nextButton().should('contain', createUnitsPlaceholders.nextButton)
 
@@ -204,7 +204,7 @@ describe('Login flow', () => {
         });
     });
 
-    it.skip('C417 Verify prices page', () => {
+    it('C417 Verify prices page', () => {
         create.skip_to_prices_page()
 
         create.elements.paymentMethodTitle().should('be.visible')

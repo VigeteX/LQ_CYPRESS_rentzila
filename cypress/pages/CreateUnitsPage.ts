@@ -81,6 +81,7 @@ class CreateUnitsPage {
     this.skip_to_photo_page()
     this.elements.imagesInput().selectFile(`cypress/fixtures/images/${images[0]}`, { force: true });
     this.elements.nextButton().click()
+    this.elements.servicesTitle().should('be.visible')
   }
   skip_to_prices_page(){
     this.skip_to_services_page()
@@ -98,6 +99,7 @@ class CreateUnitsPage {
     this.elements.servicesInput().type('a');
     for (let i = 0; i < amount; i++) {
       this.elements.servicesResults().eq(i).click();
+      this.elements.selectedServices().should('have.length', i + 1);
     }
     this.elements.selectedServices().should('have.length', amount)
   }
