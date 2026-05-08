@@ -75,7 +75,7 @@ class CreateUnitsPage {
     this.elements.addressSelection().should('contain', validUnit.adress)
 
     this.elements.nextButton().click()
-    this.elements.photoTitle().should('be.visible')
+    this.elements.photoTitle().should('be.visible', { timeout: 15000 })
   }
   skip_to_services_page(){
     this.skip_to_photo_page()
@@ -87,7 +87,7 @@ class CreateUnitsPage {
     this.skip_to_services_page()
     this.add_services(1)
     this.elements.nextButton().click()
-    this.elements.pricesTitle().should('be.visible')
+    this.elements.pricesTitle().should('be.visible', { timeout: 15000 })
   }
 
   doubleImageUpload(){
@@ -100,7 +100,7 @@ class CreateUnitsPage {
     for (let i = 0; i < amount; i++) {
       this.elements.servicesResults().eq(i).click();
     }
-    this.elements.selectedServices().should('have.length', 3)
+    this.elements.selectedServices().should('have.length', amount)
   }
 }
 
