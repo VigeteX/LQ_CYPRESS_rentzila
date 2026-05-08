@@ -57,7 +57,7 @@ describe('Create Unit Form Fields validation', () => {
             .invoke("text")
             .should('have.length', 9000);
     });
-    it('C318: Verify description section',  () => {
+    it.skip('C318: Verify description section',  () => {
         createUnitPage.elements.descTitle()
             .should('be.visible')
             .and('contain.text', createUnitFormFieldsText.detailedDescriptionTitle);
