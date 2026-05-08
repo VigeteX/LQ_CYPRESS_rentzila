@@ -75,19 +75,18 @@ class CreateUnitsPage {
     this.elements.addressSelection().should('contain', validUnit.adress)
 
     this.elements.nextButton().click()
-    this.elements.photoTitle().should('be.visible', { timeout: 15000 })
+    this.elements.photoTitle().should('be.visible')
   }
   skip_to_services_page(){
     this.skip_to_photo_page()
     this.elements.imagesInput().selectFile(`cypress/fixtures/images/${images[0]}`, { force: true });
     this.elements.nextButton().click()
-    this.elements.servicesTitle().should('be.visible', { timeout: 15000 })
   }
   skip_to_prices_page(){
     this.skip_to_services_page()
     this.add_services(1)
     this.elements.nextButton().click()
-    this.elements.pricesTitle().should('be.visible', { timeout: 15000 })
+    this.elements.pricesTitle().should('be.visible')
   }
 
   doubleImageUpload(){
