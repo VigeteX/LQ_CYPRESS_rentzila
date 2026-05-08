@@ -28,7 +28,7 @@ class CreateUnitsPage {
     tabItems: () => cy.get('[role="tab"]'),
     labelNumber: () => cy.get('[data-testid="labelNumber"]'),
 
-    photoTitle:() => cy.get('div[class*="ImagesUnitFlow_title"]', { timeout: 15000 }),
+    photoTitle:() => cy.get('div[class*="ImagesUnitFlow_title"]'),
     technicalPhotoTitle:() => cy.get('div[class*="ImagesUnitFlow_paragraph"]'),
     technicalPhotoDescriptionTitle:() => cy.get('div[class*="ImagesUnitFlow_descr"]'),
 
@@ -43,14 +43,14 @@ class CreateUnitsPage {
     popupCloseIcon:() => cy.get('div[class*="PopupLayout_content"]').find('div[data-testid="closeIcon"]'),
     popupButton:() => cy.get('div[class*="PopupLayout_content"]').find('button[class*="ItemButtons_darkBlueBtn"]'),
 
-    servicesTitle:() => cy.get('div[class*="ServicesUnitFlow_title"]', { timeout: 15000 }),
+    servicesTitle:() => cy.get('div[class*="ServicesUnitFlow_title"]'),
     servicesInput:() => cy.get('div[class*="ServicesUnitFlow_searchInput"]').find('input'),
     servicesResults:() => cy.get('div[data-testid="searchItem-servicesUnitFlow"]'),
     selectedServices:() => cy.get('div[data-testid="item-servicesUnitFlow"]'),
 
     info:() => cy.get('div[data-testid="add-info"]'),
 
-    pricesTitle:() => cy.get('div[class*="PricesUnitFlow_title"]', { timeout: 15000 }),
+    pricesTitle:() => cy.get('div[class*="PricesUnitFlow_title"]'),
     paymentMethodTitle:() => cy.get('div[class*="PricesUnitFlow_paragraph"]'),
     paymentMethodDropDawn:() => cy.get('div[class*="PricesUnitFlow_methodSelectWrapper"]'),
     customSelect:() => cy.get('li[data-testid="item-customSelect"]'),
@@ -80,6 +80,7 @@ class CreateUnitsPage {
   skip_to_services_page(){
     this.skip_to_photo_page()
     this.elements.imagesInput().selectFile(`cypress/fixtures/images/${images[0]}`, { force: true });
+    this.elements.unitImage().eq(0).should('be.visible').and('have.prop', 'naturalWidth').and('be.gt', 0);
     this.elements.nextButton().click()
     this.elements.servicesTitle().should('be.visible')
   }
