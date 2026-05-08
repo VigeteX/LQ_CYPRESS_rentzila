@@ -100,6 +100,7 @@ class CreateUnitsPage {
     for (let i = 0; i < amount; i++) {
       this.elements.servicesResults().eq(i).click();
     }
+    this.elements.selectedServices().should('have.length', 3)
   }
 }
 
