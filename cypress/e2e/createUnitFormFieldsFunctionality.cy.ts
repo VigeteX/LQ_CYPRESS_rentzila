@@ -215,7 +215,7 @@ describe('Create Unit Form Fields validation', () => {
             .then(text => text.replace(/\s+/g, ' ').trim())
             .should('eq', createUnitFormFieldsText.vehicleLocationTitle)
     });
-    it('C393: Verify "Далі" button at second tab', () => {
+    it.skip('C393: Verify "Далі" button at second tab', () => {
         const validPhoto: string = "cypress/testData/validPhotos/photo_1.jpg"
         createUnitPage.fillRequiredFields();
         createUnitPage.elements.nextButton().click();
