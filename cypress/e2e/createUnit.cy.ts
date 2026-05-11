@@ -154,20 +154,20 @@ describe('Login flow', () => {
         create.skip_to_services_page()
         create.add_services(3)
 
-        create.elements.selectedServices().eq(1).find('div[class*="ServicesUnitFlow_serviceText"]').invoke('text').then((text) => {
+        create.elements.selectedServices().eq(1).find(create.addServicesLoc).invoke('text').then((text) => {
             const trimmedText = text.trim();
             cy.wrap(trimmedText).as('deletedText');
         });
-        create.elements.selectedServices().eq(1).find('button[data-testid="remove-servicesUnitFlow"]').click();
+        create.elements.selectedServices().eq(1).find(create.removeServicesLoc).click();
         cy.get('@deletedText').then((text: any) => {
             cy.contains(text).should('not.exist');
         });
 
-        create.elements.selectedServices().eq(0).find('div[class*="ServicesUnitFlow_serviceText"]').invoke('text').then((text) => {
+        create.elements.selectedServices().eq(0).find(create.addServicesLoc).invoke('text').then((text) => {
             const trimmedText = text.trim();
             cy.wrap(trimmedText).as('deletedText');
         });
-        create.elements.selectedServices().eq(0).find('button[data-testid="remove-servicesUnitFlow"]').click();
+        create.elements.selectedServices().eq(0).find(create.removeServicesLoc).click();
         cy.get('@deletedText').then((text: any) => {
             cy.contains(text).should('not.exist');
         });

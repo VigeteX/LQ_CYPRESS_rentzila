@@ -2,6 +2,9 @@ import { createUnitsPlaceholders } from '../constants/uiTexts';
 import { validUnit, images } from '../fixtures/createUnit.data';
 class CreateUnitsPage {
   readonly IMAGES_PER_ROW = 4;
+  readonly addServicesLoc = 'div[class*="ServicesUnitFlow_serviceText"]';
+  readonly removeServicesLoc = 'button[data-testid="remove-servicesUnitFlow"]';
+
   elements ={
     nextButton:() => cy.get('button[data-testid="nextButton"]'),
     prevButton:() => cy.get('button[data-testid="prevButton"]'),
