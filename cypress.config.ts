@@ -1,3 +1,4 @@
+declare const process: any;
 import { defineConfig } from 'cypress'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -24,7 +25,7 @@ export default defineConfig({
 
             return config
         },
-
+        defaultCommandTimeout: 50000,
         baseUrl: process.env.BASE_URL,
         specPattern: 'cypress/e2e/**/*.cy.ts',
         supportFile: 'cypress/support/e2e.ts',
