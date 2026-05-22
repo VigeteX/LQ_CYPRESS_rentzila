@@ -9,6 +9,7 @@ describe('Search functionality (C530)', () => {
     beforeEach(() => {
         cy.viewport(1920, 1080);
         cy.visit('/');
+        header.elements.preloader().should('not.exist');
     });
 
     it('Should display dropdown and navigate to products on Enter with empty input', () => {
@@ -30,10 +31,10 @@ describe('Search functionality (C530)', () => {
             });
     });
 
-    describe('Search Tests', () => {
+    describe.skip('Search Tests', () => {
         searchTerms.forEach(term => {
-            it.skip(`Should search and navigate correctly for: ${term}`, () => {
-
+            it(`Should search and navigate correctly for: ${term}`, () => {
+                header.elements.preloader().should('not.exist');
                 search.elements.searchInput().type(term).type('{enter}');
                 cy.location('pathname').should('eq', routes.PRODUCTS);
 
@@ -111,7 +112,6 @@ describe('Search functionality (C530)', () => {
     describe('Specific symbols search', () => {
         specificSymbols.forEach(symbol => {
             it(`Handles specific symbol: ${symbol}`, () => {
-
                 search.elements.searchInput().clear().type(symbol);
 
                 search.elements.dropdownSearchResults().then($results => {
@@ -130,6 +130,7 @@ describe('Search functionality (C530)', () => {
 
     it('Search with non-existing keyword', () => {
         const query = nonExistingKeyword;
+
         search.elements.searchInput().clear().type(query).type('{enter}');
 
         cy.location('pathname').should('eq', routes.PRODUCTS);

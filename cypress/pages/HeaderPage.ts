@@ -34,6 +34,7 @@ class HeaderPage {
     navbarCatalog:() => cy.get('div[class*="NavbarCatalog_wrapper"]'),
     catalogParent:() => cy.get('div[class*="Catalog_parent"]'),
     catalogItem:() => cy.get('div[class*="CatalogItem_item"]'),
+    preloader:()=> cy.get('div[data-testid="preloader"]'),
   }
 }
 export default new HeaderPage();

@@ -24,6 +24,7 @@ describe('Login flow', () => {
     };
     it('C300 The "Обрані оголошення" page without "Обрані" units', () => {
         cy.visit(routes.OWNER_FAVORITE_UNITS);
+        header.elements.preloader().should('not.exist');
         units.elements.favouriteUnitsButton().click()
         units.elements.noFavouriteUnitsLabel().should('be.visible')
         units.elements.emptyBlockButton().should('be.visible')
@@ -76,6 +77,7 @@ describe('Login flow', () => {
 
     it('C305 "Пошук по назві" search field functionality', () => {
         cy.visit(routes.PRODUCTS);
+        header.elements.preloader().should('not.exist');
         products.addUnits(3)
         header.elements.avatarIcon().click();
         header.elements.profileDropdown().should('be.visible');
@@ -128,11 +130,11 @@ describe('Login flow', () => {
         units.elements.favouriteUnitsButton().click()
         
         cy.visit(routes.PRODUCTS);
-        
+        header.elements.preloader().should('not.exist');
         products.addUnits(56)
 
         cy.visit(routes.OWNER_FAVORITE_UNITS);
-
+        header.elements.preloader().should('not.exist');
         const currentPage: string = 'is your current page'
         units.elements.previousPageButton().click()
         units.elements.pageNumber().contains('1').should('be.visible').should('have.attr', 'aria-label').and('include', currentPage);
@@ -167,6 +169,7 @@ describe('Login flow', () => {
         ];
 
         cy.visit(routes.PRODUCTS);
+        header.elements.preloader().should('not.exist');
         cy.wrap(categories).each((cat: Category) => {
             products.elements.resetFilters().click();
             products.elements.preloader().should('not.exist');
@@ -208,6 +211,7 @@ describe('Login flow', () => {
         cy.url().should('include', routes.UNIT)
 
         cy.visit(routes.OWNER_FAVORITE_UNITS);
+        header.elements.preloader().should('not.exist');
         cy.url().should('include', routes.OWNER_FAVORITE_UNITS)
         cy.then(() => {
             units.elements.customSelectDropdawn().contains(categoryLabels.all).click()
@@ -221,6 +225,7 @@ describe('Login flow', () => {
         products.elements.secondCategorySpan().first().invoke('text').then(text => text.trim()).should('match', allowedCategories.municipal);
 
         cy.visit(routes.OWNER_FAVORITE_UNITS);
+        header.elements.preloader().should('not.exist');
         cy.url().should('include', routes.OWNER_FAVORITE_UNITS)
         cy.then(() => {
             units.elements.customSelectDropdawn().contains(categoryLabels.all).click()
@@ -234,6 +239,7 @@ describe('Login flow', () => {
         products.elements.secondCategorySpan().first().invoke('text').then(text => text.trim()).should('match', allowedCategories.warehouse); 
 
         cy.visit(routes.OWNER_FAVORITE_UNITS);
+        header.elements.preloader().should('not.exist');
         cy.url().should('include', routes.OWNER_FAVORITE_UNITS)
         cy.then(() => {
             units.elements.customSelectDropdawn().contains(categoryLabels.all).click()
@@ -254,6 +260,7 @@ describe('Login flow', () => {
         ];
 
         cy.visit(routes.PRODUCTS);
+        header.elements.preloader().should('not.exist');
         cy.wrap(categories).each((cat: Category) => {
             products.elements.resetFilters().click();
             products.elements.preloader().should('not.exist');
@@ -327,6 +334,7 @@ describe('Login flow', () => {
         ];
 
         cy.visit(routes.PRODUCTS);
+        header.elements.preloader().should('not.exist');
         cy.wrap(categories).each((cat: Category) => {
             products.elements.resetFilters().click();
             products.elements.preloader().should('not.exist');

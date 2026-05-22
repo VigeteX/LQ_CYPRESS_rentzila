@@ -2,9 +2,9 @@ import header from '../pages/HeaderPage';
 import create from '../pages/CreateUnitsPage';
 import loginPage from '../pages/LoginPage';
 import { validUser } from '../fixtures/login.data';
-import { validUnit, images, notimage, bigimage } from '../fixtures/createUnit.data';
+import { validUnit, images, notimage, bigimage, priceInputs, priceInputExpect } from '../fixtures/createUnit.data';
 import { routes } from '../constants/routes';
-import { createUnitsPlaceholders, tabNames, errorMessages, paymentMethods } from '../constants/uiTexts';
+import { createUnitsPlaceholders, tabNames, errorMessages, paymentMethods, createUnitsDropdown, createUnitsShiftDropdown } from '../constants/uiTexts';
 import 'cypress-real-events';
 
 describe('Login flow', () => {   
@@ -16,6 +16,7 @@ describe('Login flow', () => {
         loginPage.login(validUser.email, validUser.password)
         header.elements.avatarIcon().should('be.visible');
         cy.visit(routes.CREATE_UNIT);
+        header.elements.preloader().should('not.exist');
     });
 
     it('C329 Verify "Далі" button', () => {
@@ -221,5 +222,59 @@ describe('Login flow', () => {
         create.elements.paymentMethodDropDawn().click()
         create.elements.customSelect().find('span').contains(paymentMethods.cashlessVAT).should('be.visible').click()
         create.elements.paymentMethodDropDawn().find('span').should('contain', paymentMethods.cashlessVAT)
+    });
+
+    it('C418 Verify "Вартість мінімального замовлення" section', () => {
+        create.skip_to_prices_page()
+        create.elements.priceInputTitle().should('be.visible')
+        cy.wrap(priceInputs).each((textToInput: string, i: number) => {
+            create.elements.priceInput().eq(0).clear().type(textToInput).should('have.value', priceInputExpect[i]);
+        });
+        create.elements.currency().should('have.value', 'UAH');
+    });
+
+    it('C482 Verify adding price for service', () => {
+        create.skip_to_prices_page()
+
+        create.elements.addPriceButton().should('be.visible').and('contain.text', createUnitsPlaceholders.addText).find('svg').should('exist');                      
+        create.elements.addPriceButton().click()
+        
+        cy.wrap(priceInputs).each((textToInput: string, i: number) => {
+            create.elements.priceInput().eq(2).clear().type(textToInput).should('have.value', priceInputExpect[i]);
+        });
+        create.elements.currency().eq(1).should('have.value', 'UAH');
+        
+        create.elements.dropdown().should('be.visible').and('contain.text', createUnitsDropdown[0]).find('svg').should('exist');
+        cy.wrap(createUnitsDropdown).each((text: string) => {
+            create.elements.dropdown().click()
+            cy.get(create.itemCustomSelect).contains(text).click()
+            create.elements.dropdown().should('contain.text', text)
+        });
+
+        create.elements.dropdown().click()
+        cy.get(create.itemCustomSelect).contains(createUnitsDropdown[1]).click()
+        cy.wrap(createUnitsShiftDropdown).each((text: string) => {
+            create.elements.shiftDropdown().click()
+            cy.get(create.itemCustomSelect).contains(text).click()
+            create.elements.shiftDropdown().should('contain.text', text)
+        });
+
+        create.elements.removePrice().click()
+        create.elements.removePrice().should('not.exist')
+        create.elements.addPriceButton().should('be.visible')
+    });
+
+    it('C488 Verify "Назад" button', () => {
+        create.skip_to_prices_page()
+        create.elements.prevButton().click()
+        create.elements.selectedServices().should('have.length.at.least', 1)
+    });
+
+    it('C489 Verify contact card block, with filled personal info account', () => {
+        create.skip_to_prices_page()
+        create.elements.nextButton().click()
+        create.elements.unitPriceError().should('be.visible')
+        create.elements.priceInput().eq(0).type(priceInputs[0])
+        create.elements.nextButton().click()
     });
 });
