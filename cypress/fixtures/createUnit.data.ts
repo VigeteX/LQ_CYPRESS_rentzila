@@ -12,3 +12,5 @@ export const images = ['1.png','2.jpg','3.png','4.jpg','5.jpg','6.jpg','7.jpg','
 export const imagesRepeat = ['1.png','1.png']
 export const notimage = ['0.txt']
 export const bigimage = ['Bontecou_Lake_Milky_Way_panorama.jpg']
+export const priceInputs = ['1234567890', '123 456', '123456  ', '  ', 'abc', '!@#$%.,']
+export const priceInputExpect = ['123456789', '123456', '123456', '', '', '']

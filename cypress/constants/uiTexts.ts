@@ -11,7 +11,11 @@ export const createUnitsPlaceholders = {
   nextButton: 'Далі',
   prevButton: 'Назад',
   enterUnitNameInput: 'Введіть назву оголошення',
+  forExemple: 'Наприклад, 1000',
+  addText:'Додати вартість',
 };
+export const createUnitsDropdown = ['година', 'зміна', 'тонна', 'гектар', 'метр кв.', 'метр куб.', 'Кілометр']
+export const createUnitsShiftDropdown = ['8 год', '4 год']
 
 export const searchMessages = {
   zeroResults: "Знайдено 0",

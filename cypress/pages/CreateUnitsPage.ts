@@ -4,7 +4,8 @@ class CreateUnitsPage {
   readonly IMAGES_PER_ROW = 4;
   readonly addServicesLoc = 'div[class*="ServicesUnitFlow_serviceText"]';
   readonly removeServicesLoc = 'button[data-testid="remove-servicesUnitFlow"]';
-
+  readonly itemCustomSelect = 'li[data-testid="item-customSelect"]';
+  
   elements ={
     nextButton:() => cy.get('button[data-testid="nextButton"]'),
     prevButton:() => cy.get('button[data-testid="prevButton"]'),
@@ -57,7 +58,15 @@ class CreateUnitsPage {
     paymentMethodTitle:() => cy.get('div[class*="PricesUnitFlow_paragraph"]'),
     paymentMethodDropDawn:() => cy.get('div[class*="PricesUnitFlow_methodSelectWrapper"]'),
     customSelect:() => cy.get('li[data-testid="item-customSelect"]'),
-    
+
+    priceInputTitle:() => cy.get('div[class*="PricesUnitFlow_paragraph"]'),
+    priceInput:() => cy.get('input[data-testid="priceInput_RowUnitPrice"]'),
+    currency:() => cy.get('input[class*="RowUnitPrice_currencyText"]'),
+    addPriceButton:() => cy.get('button[data-testid="addPriceButton_ServicePrice"]'),
+    dropdown:() => cy.get('div[class*="RowUnitPrice_selectTimingWrapper"]').find('div[data-testid="div_CustomSelect"]'),
+    shiftDropdown:() => cy.get('div[class*="RowUnitPrice_selectTiming_"]').find('div[data-testid="div_CustomSelect"]'),
+    removePrice:() => cy.get('div[data-testid="div_removePrice_RowUnitPrice"]'),
+    unitPriceError:() => cy.get('div[data-testid="div_required_RowUnitPrice"]'),
   }
   skip_to_photo_page(){
     this.elements.nextButton().should('contain', createUnitsPlaceholders.nextButton)
