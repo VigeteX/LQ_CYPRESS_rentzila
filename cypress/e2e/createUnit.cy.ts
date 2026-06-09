@@ -289,7 +289,7 @@ describe('Login flow', () => {
         create.elements.paragraph(account.GEO).should('exist')
     });
 
-    it('C537 Verify contact card block, with filled personal info account', () => {
+    it('C537 Verify operator section', () => {
         create.skip_to_contacts_page()
         create.elements.checkBoxTitle().should('exist')
         create.elements.checkBoxOperator().should('be.checked');

@@ -72,4 +72,11 @@ describe('Login flow', () => {
         cabinet.elements.customInput().eq(0).clear().type(account.inn)
         cabinet.elements.error().eq(1).should('not.exist')
     });
+    afterEach(() => {
+        cabinet.elements.customSelect().eq(0).click()
+        cabinet.elements.customSelectOption().contains(account.ownerType).click()
+        cabinet.elements.customInput().eq(0).clear().type(account.inn)
+        cabinet.elements.nextButton().click()
+    });
+
 });
