@@ -8,6 +8,18 @@ export const validPhones = [
     '0509998667',
 ];
 
+export const account = {
+    userName: 'Asd Asd Asd',
+    inn: '1234567890',
+    telegram: 'Asda',
+    GEO: 'Київ',
+
+    name: 'Asd',
+    surname: 'Asd',
+    pname: 'Asd',
+    ownerType: 'Приватна особа',
+}
+
 export const invalidEmails = [
     'tttest 0tttest@gmail.com',
     'еуіегіуккутеяшдф',

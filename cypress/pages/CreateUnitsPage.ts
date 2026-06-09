@@ -1,5 +1,5 @@
-import { createUnitsPlaceholders } from '../constants/uiTexts';
-import { validUnit, images } from '../fixtures/createUnit.data';
+import { commonPlaceholders } from '../constants/uiTexts';
+import { validUnit, images, priceInputs } from '../fixtures/createUnit.data';
 class CreateUnitsPage {
   readonly IMAGES_PER_ROW = 4;
   readonly addServicesLoc = 'div[class*="ServicesUnitFlow_serviceText"]';
@@ -67,9 +67,35 @@ class CreateUnitsPage {
     shiftDropdown:() => cy.get('div[class*="RowUnitPrice_selectTiming_"]').find('div[data-testid="div_CustomSelect"]'),
     removePrice:() => cy.get('div[data-testid="div_removePrice_RowUnitPrice"]'),
     unitPriceError:() => cy.get('div[data-testid="div_required_RowUnitPrice"]'),
+
+    contactTitle:() => cy.get('div[class*="AuthContactCard_title"]'),
+    userName:() => cy.get('div[data-testid="userName"]'),
+    inn:() => cy.get('div[data-testid="inn"]'),
+    paragraph:(value:string) => cy.get('div[class*="ParagraphWithIcon_paragraph"]').contains(value),
+
+    checkBoxTitle:() => cy.get('div[class*="OperatorCheckbox_title"]'),
+    checkBox:() => cy.get('div[class*="OperatorCheckbox_checkBox"]'),
+    checkBoxOperator:() => cy.get('input[data-testid="operatorCheckbox"]'),
+    checkBoxText:() => cy.get('div[class*="OperatorCheckbox_checkBox"]').find('label'),
+
+    operatorFormName:() => cy.get('div[class*="OperatorForm_wrapperName"]'),
+    operatorFormPhone:() => cy.get('div[class*="OperatorForm_phone"]'),
+    
+    operatorFormSurnameTitle:() => cy.get('div[class*="OperatorForm_wrapperName"]').find('div[class*="CustomValidInput_title"]').eq(0),
+    operatorFormSurnameInput:() => cy.get('div[class*="OperatorForm_wrapperName"]').find('input[data-testid="customValidInput"]').eq(0),
+    operatorFormSurnameError:() => cy.get('div[class*="OperatorForm_wrapperName"]').find('div[data-testid="errorDescr"]').eq(0),
+
+    operatorFormNameTitle:() => cy.get('div[class*="OperatorForm_wrapperName"]').find('div[class*="CustomValidInput_title"]').eq(1),
+    operatorFormNameInput:() => cy.get('div[class*="OperatorForm_wrapperName"]').find('input[data-testid="customValidInput"]').eq(1),
+    operatorFormNameError:() => cy.get('div[class*="OperatorForm_wrapperName"]').find('div[data-testid="errorDescr"]').eq(1),
+
+    operatorFormPhoneTitle:() => cy.get('div[class*="OperatorForm_phone"]').find('div[class*="OperatorForm_title"]'),
+    operatorFormPhoneInput:() => cy.get('div[class*="OperatorForm_phone"]').find('input[data-testid="phone"]'),
+    operatorFormPhoneError:() => cy.get('div[class*="OperatorForm_phone"]').find('p[data-testid="errorMessage"]'),
+
   }
   skip_to_photo_page(){
-    this.elements.nextButton().should('contain', createUnitsPlaceholders.nextButton)
+    this.elements.nextButton().should('contain', commonPlaceholders.nextButton)
     this.elements.nextButton().click()
 
     this.elements.categorySelect().click()
@@ -101,6 +127,11 @@ class CreateUnitsPage {
     this.add_services(1)
     this.elements.nextButton().click()
     this.elements.pricesTitle().should('be.visible')
+  }
+  skip_to_contacts_page(){
+    this.skip_to_prices_page()
+    this.elements.priceInput().eq(0).type(priceInputs[0])
+    this.elements.nextButton().click()
   }
 
   doubleImageUpload(){

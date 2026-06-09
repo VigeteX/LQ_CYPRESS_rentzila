@@ -11,5 +11,5 @@ export const routes = {
   KOMUNALNA_TEKHNIKA: '/komunalna-tekhnika/',
   SKLADSKA_TEKHNIKA: '/skladska-tekhnika/',
   CREATE_UNIT:'/create-unit/',
-  
+  OWNER_CABINET: '/owner-cabinet/'
 }

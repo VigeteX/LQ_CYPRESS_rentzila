@@ -5,15 +5,47 @@ export const footerPlaceholders = {
 
 export const unitsPlaceholders = {
   unitTitle: 'Заголовок оголошення',
+  contactsTitle: 'Ваші контакти',
+  checkBoxText: 'Я оператор технічного засобу',
 };
 
 export const createUnitsPlaceholders = {
-  nextButton: 'Далі',
-  prevButton: 'Назад',
   enterUnitNameInput: 'Введіть назву оголошення',
   forExemple: 'Наприклад, 1000',
   addText:'Додати вартість',
+
 };
+
+export const cabinetPlaceholders = {
+  pname: 'По-батькові',
+  city: 'Місто',
+  type: 'Тип особи, до якої належите *',
+  inn: 'РНОКПП (ІПН)',
+  verification: 'Заповніть поле для підтвердження своєї особи та контактної інформації',
+  viber: '+380 12 345 67 89',
+  phone: '+380 50 999 8667',
+}
+export const cabinetOwnerTyps = {
+  FOP: 'ФОП',
+  privat: 'Приватна особа',
+  legal: 'Юридична особа',
+}
+
+export const commonPlaceholders = {
+  nextButton: 'Далі',
+  prevButton: 'Назад',
+
+  surname: 'Прізвище\u00a0*',
+  name: 'Ім’я\u00a0*',
+  name2: "Ім'я\u00a0*",
+  phone: 'Телефон *',
+  phone2: 'Номер телефону *',
+
+  viber: 'Viber',
+  telegram: 'Telegram',
+  email: 'Email\u00a0*', 
+}
+
 export const createUnitsDropdown = ['година', 'зміна', 'тонна', 'гектар', 'метр кв.', 'метр куб.', 'Кілометр']
 export const createUnitsShiftDropdown = ['8 год', '4 год']
 
@@ -26,6 +58,9 @@ export const errorMessages = {
   double: "Ви не можете завантажити двічі один файл.",
   notValid: "Формат зображення не підтримується. Допустимі формати: .jpg, .jpeg, .png. Ви не можете завантажити файл більше 20 МВ.",
   atLeastOne: "Додайте в оголошення принаймні 1 послугу",
+  atLeastTen: "Код ІПН не може бути коротше 10 символів",
+  required: "Це поле обов’язкове",
+
 }
 
 export const unitButtons = {
