@@ -19,7 +19,7 @@ describe('Login flow', () => {
         header.elements.preloader().should('not.exist');
     });
 
-    it.skip('C329 Verify "Далі" button', () => {
+    it('C329 Verify "Далі" button', () => {
         create.elements.nextButton().should('contain', commonPlaceholders.nextButton)
         create.elements.nextButton().click()
 
@@ -58,7 +58,7 @@ describe('Login flow', () => {
 
     });
 
-    it.skip('C367 Verify image upload panels', () => {
+    it('C367 Verify image upload panels', () => {
         create.skip_to_photo_page()
 
         create.elements.photoTitle().should('be.visible')
@@ -94,7 +94,7 @@ describe('Login flow', () => {
         });
     });
 
-    it.skip('C384 Verify same images uploading', () => {
+    it('C384 Verify same images uploading', () => {
         create.skip_to_photo_page()
 
         create.doubleImageUpload()
@@ -113,7 +113,7 @@ describe('Login flow', () => {
         create.elements.popup().should('not.exist')
     });
 
-    it.skip('C401 Verify uploading of invalid file type', () => {
+    it('C401 Verify uploading of invalid file type', () => {
         create.skip_to_photo_page()
 
         create.elements.imagesInput().selectFile(`cypress/fixtures/images/${notimage[0]}`, { force: true });
@@ -132,7 +132,7 @@ describe('Login flow', () => {
         create.elements.popup().should('not.exist')
     });
     
-    it.skip('C405 Verify uploading of invalid size file', () => {
+    it('C405 Verify uploading of invalid size file', () => {
         create.skip_to_photo_page()
 
         create.elements.imagesInput().selectFile(`cypress/fixtures/images/${bigimage[0]}`, { force: true });
@@ -151,7 +151,7 @@ describe('Login flow', () => {
         create.elements.popup().should('not.exist')
     });
 
-    it.skip('C412 Verify removing variants from choosed list', () => {
+    it('C412 Verify removing variants from choosed list', () => {
         create.skip_to_services_page()
         create.add_services(3)
 
@@ -174,7 +174,7 @@ describe('Login flow', () => {
         });
     });
 
-    it.skip('C413 Verify "Назад" button', () => {
+    it('C413 Verify "Назад" button', () => {
         create.skip_to_services_page()
         create.elements.prevButton().should('contain', commonPlaceholders.prevButton)
 
@@ -182,7 +182,7 @@ describe('Login flow', () => {
         create.elements.photoTitle().should('be.visible')
     });
 
-    it.skip('C414 Verify "Далі" button', () => {
+    it('C414 Verify "Далі" button', () => {
         create.skip_to_services_page()
         create.elements.nextButton().should('contain', commonPlaceholders.nextButton)
 
@@ -205,7 +205,7 @@ describe('Login flow', () => {
         });
     });
 
-    it.skip('C417 Verify prices page', () => {
+    it('C417 Verify prices page', () => {
         create.skip_to_prices_page()
 
         create.elements.paymentMethodTitle().should('be.visible')
@@ -224,7 +224,7 @@ describe('Login flow', () => {
         create.elements.paymentMethodDropDawn().find('span').should('contain', paymentMethods.cashlessVAT)
     });
 
-    it.skip('C418 Verify "Вартість мінімального замовлення" section', () => {
+    it('C418 Verify "Вартість мінімального замовлення" section', () => {
         create.skip_to_prices_page()
         create.elements.priceInputTitle().should('be.visible')
         cy.wrap(priceInputs).each((textToInput: string, i: number) => {
@@ -233,7 +233,7 @@ describe('Login flow', () => {
         create.elements.currency().should('have.value', 'UAH');
     });
 
-    it.skip('C482 Verify adding price for service', () => {
+    it('C482 Verify adding price for service', () => {
         create.skip_to_prices_page()
 
         create.elements.addPriceButton().should('be.visible').and('contain.text', createUnitsPlaceholders.addText).find('svg').should('exist');                      
@@ -264,13 +264,13 @@ describe('Login flow', () => {
         create.elements.addPriceButton().should('be.visible')
     });
 
-    it.skip('C488 Verify "Назад" button', () => {
+    it('C488 Verify "Назад" button', () => {
         create.skip_to_prices_page()
         create.elements.prevButton().click()
         create.elements.selectedServices().should('have.length.at.least', 1)
     });
 
-    it.skip('C489 Verify ""Далі"" button', () => {
+    it('C489 Verify ""Далі"" button', () => {
         create.skip_to_prices_page()
         create.elements.nextButton().click()
         create.elements.unitPriceError().should('be.visible')
@@ -278,7 +278,7 @@ describe('Login flow', () => {
         create.elements.nextButton().click()
     });
 
-    it.skip('C536 Verify contact card block, with filled personal info account', () => {
+    it('C536 Verify contact card block, with filled personal info account', () => {
         create.skip_to_contacts_page()
         create.elements.contactTitle().should('exist')
         create.elements.userName().contains(account.userName).should('exist')
@@ -289,7 +289,7 @@ describe('Login flow', () => {
         create.elements.paragraph(account.GEO).should('exist')
     });
 
-    it.skip('C537 Verify contact card block, with filled personal info account', () => {
+    it('C537 Verify contact card block, with filled personal info account', () => {
         create.skip_to_contacts_page()
         create.elements.checkBoxTitle().should('exist')
         create.elements.checkBoxOperator().should('be.checked');
