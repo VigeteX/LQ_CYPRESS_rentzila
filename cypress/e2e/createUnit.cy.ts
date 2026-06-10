@@ -1,10 +1,10 @@
 import header from '../pages/HeaderPage';
 import create from '../pages/CreateUnitsPage';
 import loginPage from '../pages/LoginPage';
-import { validUser } from '../fixtures/login.data';
-import { validUnit, images, notimage, bigimage, priceInputs, priceInputExpect } from '../fixtures/createUnit.data';
+import { validUser, validPhones, account } from '../fixtures/login.data';
+import { validUnit, images, notimage, bigimage, priceInputs, priceInputExpect, invalidInput, surnameErrorResponse, nameErrorResponse, invalidPhoneInput, phoneErrorResponse, numberPrefix, phoneOperators, baseNumber } from '../fixtures/createUnit.data';
 import { routes } from '../constants/routes';
-import { createUnitsPlaceholders, tabNames, errorMessages, paymentMethods, createUnitsDropdown, createUnitsShiftDropdown } from '../constants/uiTexts';
+import { createUnitsPlaceholders, tabNames, errorMessages, paymentMethods, createUnitsDropdown, createUnitsShiftDropdown, commonPlaceholders } from '../constants/uiTexts';
 import 'cypress-real-events';
 
 describe('Login flow', () => {   
@@ -20,7 +20,7 @@ describe('Login flow', () => {
     });
 
     it('C329 Verify "Далі" button', () => {
-        create.elements.nextButton().should('contain', createUnitsPlaceholders.nextButton)
+        create.elements.nextButton().should('contain', commonPlaceholders.nextButton)
         create.elements.nextButton().click()
 
         create.elements.categorySelectError().should('be.visible')
@@ -176,7 +176,7 @@ describe('Login flow', () => {
 
     it('C413 Verify "Назад" button', () => {
         create.skip_to_services_page()
-        create.elements.prevButton().should('contain', createUnitsPlaceholders.prevButton)
+        create.elements.prevButton().should('contain', commonPlaceholders.prevButton)
 
         create.elements.prevButton().click()
         create.elements.photoTitle().should('be.visible')
@@ -184,7 +184,7 @@ describe('Login flow', () => {
 
     it('C414 Verify "Далі" button', () => {
         create.skip_to_services_page()
-        create.elements.nextButton().should('contain', createUnitsPlaceholders.nextButton)
+        create.elements.nextButton().should('contain', commonPlaceholders.nextButton)
 
         create.elements.nextButton().click()
         create.elements.info().contains(errorMessages.atLeastOne).should('be.visible')
@@ -270,11 +270,81 @@ describe('Login flow', () => {
         create.elements.selectedServices().should('have.length.at.least', 1)
     });
 
-    it('C489 Verify contact card block, with filled personal info account', () => {
+    it('C489 Verify ""Далі"" button', () => {
         create.skip_to_prices_page()
         create.elements.nextButton().click()
         create.elements.unitPriceError().should('be.visible')
         create.elements.priceInput().eq(0).type(priceInputs[0])
         create.elements.nextButton().click()
+    });
+
+    it('C536 Verify contact card block, with filled personal info account', () => {
+        create.skip_to_contacts_page()
+        create.elements.contactTitle().should('exist')
+        create.elements.userName().contains(account.userName).should('exist')
+        create.elements.inn().contains(account.inn).should('exist')
+        create.elements.paragraph(validPhones[0]).should('exist')
+        create.elements.paragraph(validUser.email).should('exist')
+        create.elements.paragraph(account.telegram).should('exist')
+        create.elements.paragraph(account.GEO).should('exist')
+    });
+
+    it('C537 Verify operator section', () => {
+        create.skip_to_contacts_page()
+        create.elements.checkBoxTitle().should('exist')
+        create.elements.checkBoxOperator().should('be.checked');
+        
+        create.elements.checkBoxOperator().click()
+        create.elements.operatorFormName().should('be.visible')
+        create.elements.operatorFormPhone().should('be.visible')
+        create.elements.checkBoxOperator().click()
+        create.elements.operatorFormName().should('not.exist')
+        create.elements.operatorFormPhone().should('not.exist')
+
+        create.elements.checkBoxText().click()
+        create.elements.operatorFormName().should('be.visible')
+        create.elements.operatorFormPhone().should('be.visible')
+        create.elements.checkBoxText().click()
+        create.elements.operatorFormName().should('not.exist')
+        create.elements.operatorFormPhone().should('not.exist')
+
+        create.elements.checkBoxText().click()
+        create.elements.operatorFormSurnameTitle().should('contain', commonPlaceholders.surname)
+        create.elements.operatorFormSurnameInput().should('contain', '')
+        create.elements.operatorFormSurnameError().should('contain', errorMessages.required)
+
+        create.elements.operatorFormNameTitle().should('contain', commonPlaceholders.name)
+        create.elements.operatorFormNameInput().should('contain', '')
+        create.elements.operatorFormNameError().should('contain', errorMessages.required)
+
+        create.elements.operatorFormPhoneTitle().should('contain', commonPlaceholders.phone)
+        create.elements.operatorFormPhoneInput().should('contain', '')
+        create.elements.operatorFormPhoneError().should('contain', errorMessages.required)
+        
+        cy.wrap(invalidInput).each((text:string, i: number) => {
+            const expectedError = surnameErrorResponse[i < 2 ? i : 2];
+            create.elements.operatorFormSurnameInput().clear().type(text)
+            create.elements.operatorFormSurnameError().should('contain', expectedError)
+            create.elements.operatorFormSurnameError().should('contain', expectedError)
+        });
+
+        cy.wrap(invalidInput).each((text:string, i: number) => {
+            const expectedError = nameErrorResponse[i < 2 ? i : 2];
+            create.elements.operatorFormNameInput().clear().type(text)
+            create.elements.operatorFormNameError().should('contain', expectedError)
+        });
+
+        cy.wrap(invalidPhoneInput).each((text:string, i: number) => {
+            const expectedError = phoneErrorResponse[i < 2 ? 0 : 1];
+            create.elements.operatorFormPhoneInput().clear().type(text)
+            create.elements.operatorFormPhoneError().should('contain', expectedError)
+        });
+
+        cy.wrap(phoneOperators).each((operator) => {
+            const fullPhoneNumber = `${numberPrefix}${operator}${baseNumber}`;
+            create.elements.operatorFormPhoneInput().clear().type(fullPhoneNumber)
+            create.elements.operatorFormPhoneError().should('not.exist')
+        });
+
     });
 });
