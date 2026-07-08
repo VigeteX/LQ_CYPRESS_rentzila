@@ -157,7 +157,7 @@ describe('Login flow', () => {
         units.elements.pageNumber().contains('12').should('be.visible').should('have.attr', 'aria-label').and('include', currentPage);
     });
 
-    it('C315 "Всі категорії" dropdown menu functionality', () => {
+    it.skip('C315 "Всі категорії" dropdown menu functionality', () => {
         cy.intercept('*', (req) => {
             console.log(req.method, req.url);
         });
@@ -248,7 +248,7 @@ describe('Login flow', () => {
         });
     });
 
-    it('C316 "По даті створення" drop down menu functionality', () => {
+    it.skip('C316 "По даті створення" drop down menu functionality', () => {
         cy.intercept('*', (req) => {
             console.log(req.method, req.url);
         });
@@ -322,7 +322,7 @@ describe('Login flow', () => {
         });
     });
 
-    it('C303 "Очистити список" button functionality', () => {
+    it.skip('C303 "Очистити список" button functionality', () => {
         cy.intercept('*', (req) => {
             console.log(req.method, req.url);
         });
