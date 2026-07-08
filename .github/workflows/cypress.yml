@@ -12,6 +12,8 @@ jobs:
 
     env:
       CYPRESS_BASE_URL: ${{ secrets.BASE_URL }}
+      CYPRESS_TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+      CYPRESS_TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
     steps:
       - name: Checkout repo

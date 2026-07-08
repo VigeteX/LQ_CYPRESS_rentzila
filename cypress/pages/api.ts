@@ -8,8 +8,8 @@ const api = {
             method: 'POST',
             url: `${BASE}/auth/jwt/create/`,
             body: {
-                email: validUser.email,
-                password: validUser.password,
+                email: Cypress.env('TEST_EMAIL'),
+                password: Cypress.env('TEST_PASSWORD'),
             },
         }).its('body.access');
     },
@@ -19,6 +19,34 @@ const api = {
             method: 'GET',
             url: `${BASE}/auth/users/me/`,
             headers: { Authorization: `Bearer ${token}` },
+        });
+    },
+ 
+    getUnits() {
+        return cy.request({
+            method: 'GET',
+            url: `${BASE}/units/`,
+        });
+    },
+ 
+    getUnit(id: number) {
+        return cy.request({
+            method: 'GET',
+            url: `${BASE}/units/${id}/`,
+        });
+    },
+ 
+    getTenders() {
+        return cy.request({
+            method: 'GET',
+            url: `${BASE}/tenders/`,
+        });
+    },
+ 
+    getTender(id: number) {
+        return cy.request({
+            method: 'GET',
+            url: `${BASE}/tender/${id}/`,
         });
     },
 };

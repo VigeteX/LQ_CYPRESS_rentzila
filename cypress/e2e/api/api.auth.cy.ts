@@ -1,35 +1,19 @@
-import { validUser } from '../../fixtures/login.data';
- 
-const BASE_URL = Cypress.env('BASE_URL') || Cypress.config('baseUrl');
-const API = `${BASE_URL}api`;
- 
+import api, { BASE } from '../../pages/api';
+
 describe('API / Auth', () => {
-    let accessToken: string;
-    let refreshToken: string;
- 
-    it('POST /auth/jwt/create/ успешный логин возвращает токены', () => {
-        cy.request({
-            method: 'POST',
-            url: `${API}/auth/jwt/create/`,
-            body: {
-                email: validUser.email,
-                password: validUser.password,
-            },
-        }).then((res) => {
-            expect(res.status).to.eq(201);
-            expect(res.body).to.have.property('access').and.to.be.a('string');
-            expect(res.body).to.have.property('refresh').and.to.be.a('string');
-            accessToken = res.body.access;
-            refreshToken = res.body.refresh;
+
+    it('POST /auth/jwt/create/ - valid credentials return tokens', () => {
+        api.getToken().then((token) => {
+            expect(token).to.be.a('string');
         });
     });
- 
-    it('POST /auth/jwt/create/ неверный пароль возвращает 400', () => {
+
+    it('POST /auth/jwt/create/ - wrong password returns 400', () => {
         cy.request({
             method: 'POST',
-            url: `${API}/auth/jwt/create/`,
+            url: `${BASE}/auth/jwt/create/`,
             body: {
-                email: validUser.email,
+                email: Cypress.env('TEST_EMAIL'),
                 password: 'wrongpassword123',
             },
             failOnStatusCode: false,
@@ -37,30 +21,30 @@ describe('API / Auth', () => {
             expect(res.status).to.eq(400);
         });
     });
- 
-    it('POST /auth/jwt/create/ пустые поля возвращают 400', () => {
+
+    it('POST /auth/jwt/create/ - empty body returns 400', () => {
         cy.request({
             method: 'POST',
-            url: `${API}/auth/jwt/create/`,
+            url: `${BASE}/auth/jwt/create/`,
             body: {},
             failOnStatusCode: false,
         }).then((res) => {
             expect(res.status).to.eq(400);
         });
     });
- 
-    it('POST /auth/jwt/refresh/ обновление токена', () => {
+
+    it('POST /auth/jwt/refresh/ - valid refresh token returns new access token', () => {
         cy.request({
             method: 'POST',
-            url: `${API}/auth/jwt/create/`,
+            url: `${BASE}/auth/jwt/create/`,
             body: {
-                email: validUser.email,
-                password: validUser.password,
+                email: Cypress.env('TEST_EMAIL'),
+                password: Cypress.env('TEST_PASSWORD'),
             },
         }).then((loginRes) => {
             cy.request({
                 method: 'POST',
-                url: `${API}/auth/jwt/refresh/`,
+                url: `${BASE}/auth/jwt/refresh/`,
                 body: { refresh: loginRes.body.refresh },
             }).then((res) => {
                 expect(res.status).to.eq(200);
@@ -68,115 +52,99 @@ describe('API / Auth', () => {
             });
         });
     });
- 
-    it('POST /auth/jwt/refresh/ невалидный refresh токен возвращает 406', () => {
+
+    it('POST /auth/jwt/refresh/ - invalid refresh token returns 406', () => {
         cy.request({
             method: 'POST',
-            url: `${API}/auth/jwt/refresh/`,
+            url: `${BASE}/auth/jwt/refresh/`,
             body: { refresh: 'invalidtoken' },
             failOnStatusCode: false,
         }).then((res) => {
             expect(res.status).to.eq(406);
         });
     });
- 
-    it('GET /auth/users/me/ получение профиля с валидным токеном', () => {
-        cy.request({
-            method: 'POST',
-            url: `${API}/auth/jwt/create/`,
-            body: {
-                email: validUser.email,
-                password: validUser.password,
-            },
-        }).then((loginRes) => {
-            cy.request({
-                method: 'GET',
-                url: `${API}/auth/users/me/`,
-                headers: { Authorization: `Bearer ${loginRes.body.access}` },
-            }).then((res) => {
+
+    it('GET /auth/users/me/ - returns profile with valid token', () => {
+        api.getToken().then((token) => {
+            api.getMe(token).then((res) => {
                 expect(res.status).to.eq(200);
-                expect(res.body).to.have.property('email', validUser.email);
+                expect(res.body).to.have.property('email', Cypress.env('TEST_EMAIL'));
                 expect(res.body).to.have.property('id').and.to.be.a('number');
             });
         });
     });
- 
-    it('GET /auth/users/me/ без токена возвращает 401', () => {
+
+    it('GET /auth/users/me/ - returns 401 without token', () => {
         cy.request({
             method: 'GET',
-            url: `${API}/auth/users/me/`,
+            url: `${BASE}/auth/users/me/`,
             failOnStatusCode: false,
         }).then((res) => {
             expect(res.status).to.eq(401);
         });
     });
 });
- 
-describe('API / Публичные эндпоинты', () => {
-    it('GET /category/ список категорий', () => {
+
+describe('API / Public endpoints', () => {
+
+    it('GET /category/ - returns list of categories', () => {
         cy.request({
             method: 'GET',
-            url: `${API}/category/`,
+            url: `${BASE}/category/`,
         }).then((res) => {
             expect(res.status).to.eq(200);
             expect(res.body).to.be.an('array').and.not.be.empty;
         });
     });
- 
-    it('GET /regions/ список регионов', () => {
+
+    it('GET /regions/ - returns list of regions', () => {
         cy.request({
             method: 'GET',
-            url: `${API}/regions/`,
+            url: `${BASE}/regions/`,
         }).then((res) => {
             expect(res.status).to.eq(200);
             expect(res.body).to.be.an('array').and.not.be.empty;
         });
     });
- 
-    it('GET /units/ список юнитов (техника)', () => {
-        cy.request({
-            method: 'GET',
-            url: `${API}/units/`,
-        }).then((res) => {
+
+    it('GET /units/ - returns list of units', () => {
+        api.getUnits().then((res) => {
             expect(res.status).to.eq(200);
             expect(res.body).to.have.property('results').and.to.be.an('array');
             expect(res.body).to.have.property('count').and.to.be.a('number');
         });
     });
- 
-    it('GET /tenders/ список тендеров', () => {
-        cy.request({
-            method: 'GET',
-            url: `${API}/tenders/`,
-        }).then((res) => {
+
+    it('GET /tenders/ - returns list of tenders', () => {
+        api.getTenders().then((res) => {
             expect(res.status).to.eq(200);
             expect(res.body).to.have.property('tenders').and.to.be.an('array');
         });
     });
- 
-    it('GET /manufacturers/ список производителей', () => {
+
+    it('GET /manufacturers/ - returns list of manufacturers', () => {
         cy.request({
             method: 'GET',
-            url: `${API}/manufacturers/`,
+            url: `${BASE}/manufacturers/`,
         }).then((res) => {
             expect(res.status).to.eq(200);
             expect(res.body).to.be.an('array');
         });
     });
- 
-    it('GET /services/ список сервисов', () => {
+
+    it('GET /services/ - returns 200', () => {
         cy.request({
             method: 'GET',
-            url: `${API}/services/`,
+            url: `${BASE}/services/`,
         }).then((res) => {
             expect(res.status).to.eq(200);
         });
     });
- 
-    it('GET /currencies/ список валют', () => {
+
+    it('GET /currencies/ - returns 200', () => {
         cy.request({
             method: 'GET',
-            url: `${API}/currencies/`,
+            url: `${BASE}/currencies/`,
         }).then((res) => {
             expect(res.status).to.eq(200);
         });

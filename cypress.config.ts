@@ -31,5 +31,10 @@ export default defineConfig({
         supportFile: 'cypress/support/e2e.ts',
         viewportWidth: 1280,
         viewportHeight: 800,
+        env: {
+            BASE_URL: process.env.BASE_URL,
+            TEST_EMAIL: process.env.TEST_EMAIL,
+            TEST_PASSWORD: process.env.TEST_PASSWORD,
+        },
     }
 })

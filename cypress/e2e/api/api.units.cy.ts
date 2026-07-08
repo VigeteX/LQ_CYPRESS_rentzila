@@ -1,23 +1,17 @@
 import api, { BASE } from '../../pages/api';
- 
+
 describe('API / Units', () => {
- 
-    it('GET /units/ список юнитов возвращает 200 и массив', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/units/`,
-        }).then((res) => {
+
+    it('GET /units/ - returns 200 and array of units', () => {
+        api.getUnits().then((res) => {
             expect(res.status).to.eq(200);
             expect(res.body).to.have.property('results').and.to.be.an('array');
             expect(res.body).to.have.property('count').and.to.be.a('number');
         });
     });
- 
-    it('GET /units/ каждый юнит содержит обязательные поля', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/units/`,
-        }).then((res) => {
+
+    it('GET /units/ - each unit contains required fields', () => {
+        api.getUnits().then((res) => {
             const units = res.body.results;
             if (units.length > 0) {
                 const unit = units[0];
@@ -28,25 +22,19 @@ describe('API / Units', () => {
             }
         });
     });
- 
-    it('GET /units/{id}/ получение конкретного юнита', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/units/`,
-        }).then((res) => {
+
+    it('GET /units/{id}/ - returns specific unit by id', () => {
+        api.getUnits().then((res) => {
             const id = res.body.results[0].id;
-            cy.request({
-                method: 'GET',
-                url: `${BASE}/units/${id}/`,
-            }).then((unitRes) => {
+            api.getUnit(id).then((unitRes) => {
                 expect(unitRes.status).to.eq(200);
                 expect(unitRes.body).to.have.property('id', id);
                 expect(unitRes.body).to.have.property('name');
             });
         });
     });
- 
-    it('GET /units/{id}/ несуществующий id возвращает 200 с пустым результатом', () => {
+
+    it('GET /units/{id}/ - non-existent id returns 200 with empty result', () => {
         cy.request({
             method: 'GET',
             url: `${BASE}/units/999999999/`,
@@ -55,12 +43,9 @@ describe('API / Units', () => {
             expect(res.status).to.eq(200);
         });
     });
- 
-    it('GET /units/slug/{slug}/ получение юнита по slug', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/units/`,
-        }).then((res) => {
+
+    it('GET /units/slug/{slug}/ - returns unit by slug', () => {
+        api.getUnits().then((res) => {
             const slug = res.body.results[0].slug;
             if (slug) {
                 cy.request({
@@ -73,8 +58,8 @@ describe('API / Units', () => {
             }
         });
     });
- 
-    it('GET /units/map/ данные для карты', () => {
+
+    it('GET /units/map/ - returns map data', () => {
         cy.request({
             method: 'GET',
             url: `${BASE}/units/map/`,
@@ -82,8 +67,8 @@ describe('API / Units', () => {
             expect(res.status).to.eq(200);
         });
     });
- 
-    it('GET /units/price/ список цен', () => {
+
+    it('GET /units/price/ - returns list of prices', () => {
         cy.request({
             method: 'GET',
             url: `${BASE}/units/price/`,
@@ -91,8 +76,8 @@ describe('API / Units', () => {
             expect(res.status).to.eq(200);
         });
     });
- 
-    it('POST /units/ создание юнита без токена возвращает 403', () => {
+
+    it('POST /units/ - returns 403 without token', () => {
         cy.request({
             method: 'POST',
             url: `${BASE}/units/`,
@@ -102,8 +87,8 @@ describe('API / Units', () => {
             expect(res.status).to.eq(403);
         });
     });
- 
-    it('POST /units/ создание юнита с токеном', () => {
+
+    it('POST /units/ - creates unit with valid token', () => {
         api.getToken().then((token) => {
             cy.request({
                 method: 'POST',
@@ -126,12 +111,9 @@ describe('API / Units', () => {
             });
         });
     });
- 
-    it('PATCH /units/{id}/ редактирование юнита без токена возвращает 403', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/units/`,
-        }).then((res) => {
+
+    it('PATCH /units/{id}/ - returns 403 without token', () => {
+        api.getUnits().then((res) => {
             const id = res.body.results[0].id;
             cy.request({
                 method: 'PATCH',
@@ -143,12 +125,9 @@ describe('API / Units', () => {
             });
         });
     });
- 
-    it('GET /units/{id}/reviews/ отзывы по юниту', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/units/`,
-        }).then((res) => {
+
+    it('GET /unit/{id}/reviews/ - returns reviews for unit', () => {
+        api.getUnits().then((res) => {
             const id = res.body.results[0].id;
             cy.request({
                 method: 'GET',
@@ -158,12 +137,9 @@ describe('API / Units', () => {
             });
         });
     });
- 
-    it('GET /units/{id}/calendars/ календарь юнита', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/units/`,
-        }).then((res) => {
+
+    it('GET /units/{id}/calendars/ - returns calendar for unit', () => {
+        api.getUnits().then((res) => {
             const id = res.body.results[0].id;
             cy.request({
                 method: 'GET',
@@ -174,5 +150,5 @@ describe('API / Units', () => {
             });
         });
     });
- 
+
 });

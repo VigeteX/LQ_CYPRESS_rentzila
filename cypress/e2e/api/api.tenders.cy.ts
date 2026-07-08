@@ -2,21 +2,15 @@ import api, { BASE } from '../../pages/api';
 
 describe('API / Tenders', () => {
 
-    it('GET /tenders/ список тендеров возвращает 200', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/tenders/`,
-        }).then((res) => {
+    it('GET /tenders/ - returns 200 and array of tenders', () => {
+        api.getTenders().then((res) => {
             expect(res.status).to.eq(200);
             expect(res.body).to.have.property('tenders').and.to.be.an('array');
         });
     });
 
-    it('GET /tenders/ каждый тендер содержит обязательные поля', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/tenders/`,
-        }).then((res) => {
+    it('GET /tenders/ - each tender contains required fields', () => {
+        api.getTenders().then((res) => {
             const tenders = res.body.tenders;
             if (tenders.length > 0) {
                 const tender = tenders[0];
@@ -28,16 +22,10 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tender/{id}/ получение конкретного тендера', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/tenders/`,
-        }).then((res) => {
+    it('GET /tender/{id}/ - returns specific tender by id', () => {
+        api.getTenders().then((res) => {
             const id = res.body.tenders[0].id;
-            cy.request({
-                method: 'GET',
-                url: `${BASE}/tender/${id}/`,
-            }).then((tenderRes) => {
+            api.getTender(id).then((tenderRes) => {
                 expect(tenderRes.status).to.eq(200);
                 expect(tenderRes.body).to.have.property('id', id);
                 expect(tenderRes.body).to.have.property('name');
@@ -45,7 +33,7 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tender/{id}/ несуществующий id возвращает 404', () => {
+    it('GET /tender/{id}/ - non-existent id returns 404 or 200', () => {
         cy.request({
             method: 'GET',
             url: `${BASE}/tender/999999999/`,
@@ -55,11 +43,8 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tender/slug/{slug}/ получение тендера по slug', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/tenders/`,
-        }).then((res) => {
+    it('GET /tender/slug/{slug}/ - returns tender by slug', () => {
+        api.getTenders().then((res) => {
             const slug = res.body.tenders[0].slug;
             if (slug) {
                 cy.request({
@@ -73,7 +58,7 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tenders/map/ данные тендеров для карты', () => {
+    it('GET /tenders/map/ - returns map data', () => {
         cy.request({
             method: 'GET',
             url: `${BASE}/tenders/map/`,
@@ -82,7 +67,7 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tender/closed/ закрытые тендеры', () => {
+    it('GET /tender/closed/ - returns closed tenders', () => {
         cy.request({
             method: 'GET',
             url: `${BASE}/tender/closed/`,
@@ -92,7 +77,7 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tender/history/ история тендеров', () => {
+    it('GET /tender/history/ - returns tender history', () => {
         cy.request({
             method: 'GET',
             url: `${BASE}/tender/history/`,
@@ -102,11 +87,8 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tender/{id}/proposes/ отклики на тендер', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/tenders/`,
-        }).then((res) => {
+    it('GET /tender/{id}/proposes/ - returns proposes for tender', () => {
+        api.getTenders().then((res) => {
             const id = res.body.tenders[0].id;
             cy.request({
                 method: 'GET',
@@ -118,7 +100,7 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('POST /tenders/ создание тендера без токена возвращает 403', () => {
+    it('POST /tenders/ - returns 403 without token', () => {
         cy.request({
             method: 'POST',
             url: `${BASE}/tenders/`,
@@ -129,7 +111,7 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('POST /tenders/ создание тендера с токеном', () => {
+    it('POST /tenders/ - creates tender with valid token', () => {
         api.getToken().then((token) => {
             cy.request({
                 method: 'POST',
@@ -157,7 +139,7 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tenders/me/ мои тендеры без токена возвращает 403', () => {
+    it('GET /tenders/me/ - returns 401/403/500 without token', () => {
         cy.request({
             method: 'GET',
             url: `${BASE}/tenders/me/`,
@@ -167,7 +149,7 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('GET /tenders/me/ мои тендеры с токеном', () => {
+    it('GET /tenders/me/ - returns my tenders with valid token', () => {
         api.getToken().then((token) => {
             cy.request({
                 method: 'GET',
@@ -179,11 +161,8 @@ describe('API / Tenders', () => {
         });
     });
 
-    it('PATCH /tender/{id}/ редактирование тендера без токена возвращает 403', () => {
-        cy.request({
-            method: 'GET',
-            url: `${BASE}/tenders/`,
-        }).then((res) => {
+    it('PATCH /tender/{id}/ - returns 403 without token', () => {
+        api.getTenders().then((res) => {
             const id = res.body.tenders[0].id;
             cy.request({
                 method: 'PATCH',
