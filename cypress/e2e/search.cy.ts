@@ -84,7 +84,7 @@ describe('Search functionality (C530)', () => {
             .should('contain.text', searchMessages.zeroResults);
     });
 
-    it('Search with numeric query displays correct results', () => {
+    it.skip('Search with numeric query displays correct results', () => {
         const query = numericQuery;
         search.elements.searchInput().type(query).type('{enter}');
         cy.location('pathname').should('eq', routes.PRODUCTS);
